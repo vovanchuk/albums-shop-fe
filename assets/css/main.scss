@@ -1,0 +1,80 @@
+@use './colors.scss';
+
+.navbar-light{
+    .navbar-brand{
+        color: colors.$primary-color;
+    }
+}
+.header{
+    background-image: url('../images/header-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-align: center;
+    min-height: 650px;
+}
+.contact{
+    background-image: url('../images/footer-image.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.login{
+    background-image: url('../images/signIn.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+.card{
+    .card-body{
+        padding: 50px;
+    }
+}
+h1, a, a:hover, .btn-outline-primary{
+    color: colors.$primary-color;
+}
+hr{
+    background-color: colors.$primary-color;
+}
+.btn, .form-control, .card{
+    border-radius: 30px;
+}
+.form-control{
+    padding: 20px;
+}
+.btn-outline-primary, .btn-outline-primary:hover{
+    border-color: colors.$primary-color;
+}
+.btn-outline-primary:hover{
+    background: colors.$primary-color;
+    color: white;
+}
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: colors.$primary-color;
+    background-color: colors.$primary-color;
+}
+.content-on-index, .templated-on-index{
+    text-align: center;
+}
+
+@media (max-width: 576px) { 
+    .login{
+        background: none;
+        text-align: center;
+    }
+    .card{
+        width: 100%;
+        border: none;
+    }
+}
+@media (max-width: 768px) { 
+
+}
+@media (max-width: 992px) {
+
+}
+@media (max-width: 1200px) { 
+
+}
