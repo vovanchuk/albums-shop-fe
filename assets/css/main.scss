@@ -1,23 +1,79 @@
 @use './colors.scss';
 
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+
 .navbar-light{
     .navbar-brand{
         color: colors.$primary-color;
     }
 }
+
 .header{
-    background-image: url('../images/header-image.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    text-align: center;
-    min-height: 650px;
+    position:relative;
+    .header-img{
+        background-image: url('../images/header-image.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 600px;
+    }
+    .header-text{
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        left: 37%;
+        transform: translate(-50%, -50%);
+        h1{
+            font-size: 65px;
+            font-weight: 100;
+        }
+        h4{
+            color: colors.$secondary-color;
+        }
+        width: 50%;
+    }
+}
+.content-on-index{
+    .row{
+        h5{
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: colors.$text-color;
+        }
+    }
+}
+.templates-on-index{
+    p{
+        margin-top: 10px;
+    }
 }
 .contact{
-    background-image: url('../images/footer-image.jpg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    position:relative;
+    .contact-img{
+        background-image: url('../images/footer-image.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 600px;
+    }
+    .contact-form{
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        left: 27%;
+        transform: translate(-50%, -50%);
+        h1{
+            font-size: 65px;
+            font-weight: 100;
+        }
+        width: 40%;
+        textarea, input{
+            border-color: colors.$text-color;
+            background-color: #fff0;
+        }
+    }
 }
 .login{
     background-image: url('../images/signIn.jpg');
@@ -55,26 +111,118 @@ hr{
     border-color: colors.$primary-color;
     background-color: colors.$primary-color;
 }
-.content-on-index, .templated-on-index{
+.content-on-index, .templates-on-index{
     text-align: center;
 }
-
+.templates{
+    text-align: center;
+    img{
+        width: 350px;
+    }
+    .one-template{
+        margin: 10px
+    }
+}
 @media (max-width: 576px) { 
-    .login{
-        background: none;
-        text-align: center;
-    }
     .card{
-        width: 100%;
-        border: none;
+        width: 95%;
+    }
+    .header{
+        .header-img{
+            min-height: 450px;
+        }
+        .header-text{
+            width: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            h1{
+                font-size: 30px;
+            }
+            h4{
+                font-size: 15px;
+            }
+        }
+    }
+    .contact{
+        .contact-form{
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+        }
+    }
+    .footer{
+        .start{
+            justify-content: center !important;
+        }
+        .end{
+            justify-content: center !important;
+        }
     }
 }
-@media (max-width: 768px) { 
-
+@media (min-width: 576px) and (max-width: 768px){ 
+    .header{
+        .header-text{
+            width: 60%;
+            h1{
+                font-size: 35px;
+            }
+            h4{
+                font-size: 20px;
+            }
+        }
+    }
+    .contact{
+        .contact-form{
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+        }
+    }
 }
-@media (max-width: 992px) {
-
+@media (min-width: 768px) and (max-width: 992px){ 
+    .header{
+        .header-text{
+            h1{
+                font-size: 35px;
+            }
+        }
+    }
+    .contact{
+        .contact-form{
+            top: 50%;
+            left: 35%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+        }
+    }
 }
-@media (max-width: 1200px) { 
-
+@media (min-width: 992px) and (max-width: 1200px){
+    .header{
+        .header-text{
+            h1{
+                font-size: 45px;
+            }
+        }
+    }
+    .contact{
+        .contact-form{
+            top: 50%;
+            left: 28%;
+            transform: translate(-50%, -50%);
+            width: 45%;
+        }
+    }
+}
+@media (min-width: 1200px) { 
+    .header{
+        .header-text{
+            h1{
+                font-size: 55px;
+            }
+        }
+    }
 }
