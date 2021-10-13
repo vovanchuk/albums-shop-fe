@@ -37,38 +37,10 @@
             </b-row>
             <hr>
         </b-container>
-        <b-container class="templates-on-index my-5">
+        <b-container class="templates my-5">
             <h1 class="my-3">SZABLONY</h1>
             <h5>Wybierz jeden spośród ponad 40 szablonów</h5>
-            <b-row class="mt-4">
-                <b-col md>
-                    <b-img src="../assets/images/wedding-template.jpg" fluid></b-img>
-                    <p>Ślubne</p>
-                </b-col>
-                <b-col md>
-                    <b-img src="../assets/images/christmas-template.jpg" fluid></b-img>
-                    <p>Okazjonalne</p>
-                </b-col>
-                <b-col md>
-                    <b-img src="../assets/images/trip-template.jpg" fluid>
-                    </b-img>
-                    <p>Podróżnicze</p>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col md>
-                    <b-img src="../assets/images/kids-template.jpg" fluid></b-img>
-                    <p>Dziecięce</p>
-                </b-col>
-                <b-col md>
-                    <b-img src="../assets/images/birthday-template.jpg" fluid></b-img>
-                    <p>Urodzinowe</p>
-                </b-col>
-                <b-col md>
-                    <b-img src="../assets/images/persons-template.jpg" fluid></b-img>
-                    <p>Dla specjalnej osoby</p>
-                </b-col>
-            </b-row>
+            <Templates :templates="templatesOnIndex" />
         </b-container>
         <div class="contact">
             <div class="contact-img">
@@ -91,3 +63,19 @@
         </div>
     </div>
 </template>
+<script>
+  export default {
+    data() {
+      return {
+        templatesOnIndex: [
+            { id: 1, url: 'wedding-template.jpg', title: 'Ślubne'},
+            { id: 2, url: 'ocasion-template.jpg', title: 'Okazjonalne'},
+            { id: 3, url: 'trip-template.jpg', title: 'Podróżnicze'},
+            { id: 4, url: 'kids-template.jpg', title: 'Dziecięce'},
+            { id: 5, url: 'birthday-template.jpg', title: 'Urodzinowe'},
+            { id: 6, url: 'person-template.jpg', title: 'Dla specjalnej osoby'},
+        ]
+      }
+    }
+  }
+</script>

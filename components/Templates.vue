@@ -1,14 +1,15 @@
 <template>
     <div class="d-flex flex-wrap justify-content-center ">
       <div class="one-template" v-for="template in templates" v-bind:key="template.id">
-        <b-img :src="require('../assets/images/' + template.url)" ></b-img>
-        <p class="mt-2">{{template.title}}</p>
+        <Template :title="template.title" :url="template.url"/>
       </div>
     </div>
 </template>
 
 <script>
+import Template from './Template.vue'
   export default {
+  components: { Template },
     props: ['templates'],
   }
 </script>

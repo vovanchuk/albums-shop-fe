@@ -123,6 +123,15 @@ hr{
         margin: 10px
     }
 }
+.details{
+    img{
+        min-width: 250px;
+    }
+    legend{
+        font-size: 20px;
+        font-weight: 400;
+    }
+}
 @media (max-width: 576px) { 
     .card{
         width: 95%;
@@ -216,13 +225,23 @@ hr{
             width: 45%;
         }
     }
+    .details{
+        img{
+            min-width: 540px;
+        }
+    }
 }
-@media (min-width: 1200px) { 
+@media (min-width: 1200px) and (max-width: 1600px) { 
     .header{
         .header-text{
             h1{
                 font-size: 55px;
             }
         }
+    }
+}
+@media (min-width: 1600px){ 
+    .container{
+        max-width: 1400px;
     }
 }
