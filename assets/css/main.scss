@@ -87,11 +87,38 @@ body{
         padding: 50px;
     }
 }
+.editor-header{
+    .card{
+        border-start-end-radius: 10px;
+        border-start-start-radius: 10px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        .card-header{
+            background: transparent;
+        }
+    }
+    .nav-tabs{
+        .nav-link{
+            color: colors.$text-color;
+        }
+        .nav-link.active{
+            border-start-end-radius: 10px;
+            border-start-start-radius: 10px;
+            color: colors.$primary-color;
+        }
+    }
+}
+.editor-body{
+    border: 1px solid colors.$text-color;
+}
 h1, a, a:hover, .btn-outline-primary{
     color: colors.$primary-color;
 }
 hr{
     background-color: colors.$primary-color;
+}
+.btn-link, .btn-link:hover{
+    color: colors.$text-color;
 }
 .btn, .form-control, .card{
     border-radius: 30px;
@@ -130,6 +157,12 @@ hr{
     legend{
         font-size: 20px;
         font-weight: 400;
+    }
+}
+.about{
+    text-align: justify;
+    img{
+        min-width: 250px;
     }
 }
 @media (max-width: 576px) { 

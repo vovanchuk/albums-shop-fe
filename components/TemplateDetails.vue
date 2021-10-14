@@ -44,11 +44,11 @@
     props: {
         url: {
             type: String,
-            default: 'wedding-template.jpg'
+            require: true
         },
         title: {
             type: String,
-            default: 'Minimalistyczny'
+            require: true
         }
     },
   }

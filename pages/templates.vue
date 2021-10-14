@@ -4,13 +4,18 @@
             <b-form-select v-model="selected" :options="options"></b-form-select>
         </div>
         <div class="templates">
-          <Templates :templates="allTemplates[selected]" />
+          <Templates :templates="allTemplates[selected]" :category="selected"/>
         </div>
     </div>
 </template>
 
 <script>
   export default {
+    computed: {
+      allTemplates() {
+        return this.$store.state.templates.allTemplates
+      }
+    },
     data() {
       return {
         selected: 'wedding',
@@ -22,56 +27,7 @@
             { value: 'birthday', text: 'Urodzinowe'},
             { value: 'person', text: 'Dla specjalnej osoby'}
         ],
-        allTemplates: {
-          'wedding': [
-            { id: 1, url: 'wedding-template.jpg', title: 'Minimalistyczny'},
-            { id: 2, url: 'wedding-pastel.jpg', title: 'Pastelowy'},
-            { id: 3, url: 'wedding-bw.jpg', title: 'Czarno-biały'},
-            { id: 4, url: 'wedding-vintage.jpg', title: 'Vintage'},
-            { id: 5, url: 'wedding-rustic.jpg', title: 'Rustykalny'},
-            { id: 6, url: 'wedding-modern.jpg', title: 'Nowoczesny'},
-          ],
-          'ocasion': [
-            { id: 1, url: 'ocasion-template.jpg', title: 'Okazjonalne'},
-            { id: 2, url: 'wedding-pastel.jpg', title: ''},
-            { id: 3, url: 'wedding-bw.jpg', title: ''},
-            { id: 4, url: 'wedding-vintage.jpg', title: ''},
-            { id: 5, url: 'wedding-rustic.jpg', title: ''},
-            { id: 6, url: 'wedding-modern.jpg', title: ''},
-          ],
-          'trip': [
-            { id: 1, url: 'trip-template.jpg', title: 'Podróżnicze'},
-            { id: 2, url: 'wedding-pastel.jpg', title: ''},
-            { id: 3, url: 'wedding-bw.jpg', title: ''},
-            { id: 4, url: 'wedding-vintage.jpg', title: ''},
-            { id: 5, url: 'wedding-rustic.jpg', title: ''},
-            { id: 6, url: 'wedding-modern.jpg', title: ''},
-          ],
-          'kids': [
-            { id: 1, url: 'kids-template.jpg', title: 'Dziecięce'},
-            { id: 2, url: 'wedding-pastel.jpg', title: ''},
-            { id: 3, url: 'wedding-bw.jpg', title: ''},
-            { id: 4, url: 'wedding-vintage.jpg', title: ''},
-            { id: 5, url: 'wedding-rustic.jpg', title: ''},
-            { id: 6, url: 'wedding-modern.jpg', title: ''},
-          ],
-          'birthday': [
-            { id: 1, url: 'birthday-template.jpg', title: 'Urodzinowe'},
-            { id: 2, url: 'wedding-pastel.jpg', title: ''},
-            { id: 3, url: 'wedding-bw.jpg', title: ''},
-            { id: 4, url: 'wedding-vintage.jpg', title: ''},
-            { id: 5, url: 'wedding-rustic.jpg', title: ''},
-            { id: 6, url: 'wedding-modern.jpg', title: ''},
-          ],
-          'person': [
-            { id: 1, url: 'person-template.jpg', title: 'Dla specjalnej osoby'},
-            { id: 2, url: 'wedding-pastel.jpg', title: ''},
-            { id: 3, url: 'wedding-bw.jpg', title: ''},
-            { id: 4, url: 'wedding-vintage.jpg', title: ''},
-            { id: 5, url: 'wedding-rustic.jpg', title: ''},
-            { id: 6, url: 'wedding-modern.jpg', title: ''},
-          ]
-        }
+
       }
     }
   }

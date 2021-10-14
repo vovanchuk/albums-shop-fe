@@ -3,7 +3,7 @@
             <b-row class="w-100">
                 <b-col class="d-flex justify-content-start start" md>
                     <b-navbar-nav>
-                        <b-nav-item href="#">O nas</b-nav-item>
+                        <b-nav-item href="/about">O nas</b-nav-item>
                         <b-nav-item href="#">FAQ</b-nav-item>
                         <b-nav-item href="#">Regulamin</b-nav-item>
                     </b-navbar-nav>

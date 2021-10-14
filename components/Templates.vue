@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-wrap justify-content-center ">
       <div class="one-template" v-for="template in templates" v-bind:key="template.id">
-        <Template :title="template.title" :url="template.url"/>
+        <Template :title="template.title" :url="template.url" :category="category"/>
       </div>
     </div>
 </template>
@@ -9,7 +9,16 @@
 <script>
 import Template from './Template.vue'
   export default {
-  components: { Template },
-    props: ['templates'],
+    components: { Template },
+    props: {
+      templates: {
+        type: Array,
+        require: true
+      },
+      category: {
+        type: String,
+        require: true        
+      }
+    }
   }
 </script>

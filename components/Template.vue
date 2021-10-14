@@ -1,8 +1,9 @@
 <template>
     <div class="d-flex flex-column">
         <b-img :src="require('../assets/images/' + url)" ></b-img>
-        <b-link class="mt-2" href="/details">{{title}}</b-link>
-    </div>
+        <nuxt-link v-if="category === 'main'" class="mt-2" :to="'/templates'">{{title}}</nuxt-link>
+        <nuxt-link v-else class="mt-2" :to="{ name: 'details', params: { title: title, url: url }}">{{title}}</nuxt-link>
+        </div>
 </template>
 
 <script>
@@ -15,7 +16,11 @@
         title: {
             type: String,
             require: true
-        }
+        },
+        category: {
+          type: String,
+          require: true        
+      }
     },
   }
 </script>

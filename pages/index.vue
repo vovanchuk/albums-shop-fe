@@ -40,7 +40,7 @@
         <b-container class="templates my-5">
             <h1 class="my-3">SZABLONY</h1>
             <h5>Wybierz jeden spośród ponad 40 szablonów</h5>
-            <Templates :templates="templatesOnIndex" />
+            <Templates :templates="templatesOnIndex" :category="category"/>
         </b-container>
         <div class="contact">
             <div class="contact-img">
@@ -67,6 +67,7 @@
   export default {
     data() {
       return {
+        category: 'main',
         templatesOnIndex: [
             { id: 1, url: 'wedding-template.jpg', title: 'Ślubne'},
             { id: 2, url: 'ocasion-template.jpg', title: 'Okazjonalne'},
