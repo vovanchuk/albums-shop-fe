@@ -1,12 +1,12 @@
 <template>
     <div class="my-5">
-        <h1>{{title}}</h1>
+        <h1>{{template.title}}</h1>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Gravida dui etiam proin sit nec tortor. Faucibus nunc, nisl, neque vulputate interdum pellentesque vulputate. Turpis senectus justo vitae gravida leo viverra. Vitae facilisi sit ac, eget consectetur commodo, nam. Dui nullam morbi at euismod accumsan, ultricies.
         </p>
         <b-row>
             <b-col lg>
-                <b-img :src="require('../assets/images/' + url)" fluid></b-img>        
+                <b-img :src="require('../assets/images/' + template.url)" fluid></b-img>        
             </b-col>
             <b-col class="d-flex flex-column justify-content-between">
                 <div class="mt-3">
@@ -32,7 +32,7 @@
                 </div>
                 <div>
                     <h1>79 PLN</h1>
-                    <b-button href="/editor" block variant="outline-primary mt-3">Dostosuj szablon</b-button>
+                    <b-button to="/editor" block variant="outline-primary mt-3">Dostosuj szablon</b-button>
                 </div>
             </b-col>
         </b-row>
@@ -41,15 +41,6 @@
 
 <script>
   export default {
-    props: {
-        url: {
-            type: String,
-            require: true
-        },
-        title: {
-            type: String,
-            require: true
-        }
-    },
+    props: ['template'],
   }
 </script>

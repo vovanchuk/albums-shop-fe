@@ -69,12 +69,12 @@
       return {
         category: 'main',
         templatesOnIndex: [
-            { id: 1, url: 'wedding-template.jpg', title: 'Ślubne'},
-            { id: 2, url: 'ocasion-template.jpg', title: 'Okazjonalne'},
-            { id: 3, url: 'trip-template.jpg', title: 'Podróżnicze'},
-            { id: 4, url: 'kids-template.jpg', title: 'Dziecięce'},
-            { id: 5, url: 'birthday-template.jpg', title: 'Urodzinowe'},
-            { id: 6, url: 'person-template.jpg', title: 'Dla specjalnej osoby'},
+            { id: 1, url: 'wedding-template.jpg', title: 'Ślubne', category: 'wedding'},
+            { id: 2, url: 'ocasion-template.jpg', title: 'Okazjonalne', category: 'occasion'},
+            { id: 3, url: 'trip-template.jpg', title: 'Podróżnicze', category: 'trip'},
+            { id: 4, url: 'kids-template.jpg', title: 'Dziecięce', category: 'kids'},
+            { id: 5, url: 'birthday-template.jpg', title: 'Urodzinowe', category: 'birthday'},
+            { id: 6, url: 'person-template.jpg', title: 'Dla specjalnej osoby', category: 'person'},
         ]
       }
     }

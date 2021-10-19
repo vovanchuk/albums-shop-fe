@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-wrap justify-content-center ">
       <div class="one-template" v-for="template in templates" v-bind:key="template.id">
-        <Template :title="template.title" :url="template.url" :category="category"/>
+        <Template :template="template" :category="category"/>
       </div>
     </div>
 </template>
