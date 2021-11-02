@@ -1,7 +1,7 @@
 <template>
-  <div class="mb-5" style="margin-top: 50px;">
+  <div class="mb-5 container d-flex justify-content-center" style="margin-top: 50px;">
     <client-only>
-      <tui-image-editor :include-ui="useDefaultUI" :options="options2"></tui-image-editor>
+      <tui-image-editor :include-ui="useDefaultUI" :options="options"></tui-image-editor>
     </client-only>
   </div>
 </template>
@@ -10,21 +10,27 @@
 export default {
   data() {
     return {
-      loading: true,
-      options2: {cssMaxWidth: 400, cssMaxHeight: 1000, minHeight: '700px', uiSize: {height: '700px'}},
       useDefaultUI: true,
-      options: false,
-      windowSize: {
-        x: 0,
-        y: 0,
-      },
+      options: {
+        includeUI: {    
+          loadImage: {
+            path: '/wedding-template.jpg',
+            name: 'SampleImage',
+          },
+          menuBarPosition: 'right',
+          uiSize: {
+            width: '1000px',
+            height: '700px'
+          },
+        },
+        cssMaxWidth: 550,
+        cssMaxHeight: 550,
+      }
     }
   },
 }
 </script>
 
 <style>
-.tui-image-editor-container {
-  min-height: 700px;
-}
+
 </style>
