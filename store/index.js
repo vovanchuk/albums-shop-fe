@@ -48,7 +48,7 @@ export const state = () => ({
       { id: 5, url: 'wedding-rustic.jpg', title: ''},
       { id: 6, url: 'wedding-modern.jpg', title: ''},
     ]
-  },
+  }
 })
 
 export const getters = {
