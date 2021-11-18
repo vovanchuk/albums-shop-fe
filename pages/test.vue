@@ -1,7 +1,7 @@
 <template>
   <div class="mb-5 container d-flex justify-content-center" style="margin-top: 50px;">
     <client-only>
-      <tui-image-editor :include-ui="useDefaultUI" :options="options"></tui-image-editor>
+      <tui-image-editor ref="editor" :include-ui="useDefaultUI" :options="options"></tui-image-editor>
     </client-only>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
     return {
       useDefaultUI: true,
       options: {
-        includeUI: {    
+        includeUI: {
           loadImage: {
             path: '/wedding-template.jpg',
             name: 'SampleImage',

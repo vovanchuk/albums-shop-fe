@@ -48,14 +48,31 @@ export const state = () => ({
       { id: 5, url: 'wedding-rustic.jpg', title: ''},
       { id: 6, url: 'wedding-modern.jpg', title: ''},
     ]
-  }
+  },
+  images: []
 })
+
+
+export const mutations = {
+  ADD_IMAGE(state, imageObj) {
+    state.images.push(imageObj)
+  },
+  DELETE_IMAGE_BY_INDEX(state, idx){
+    state.images.splice(idx, 1)
+  },
+  UPDATE_IMAGE_BY_INDEX(state, {newObj, idx}) {
+    console.log(newObj)
+    console.log(idx)
+    state.images[idx] = newObj
+  }
+}
 
 export const getters = {
   getTemplatesByCategory: (state) => (category) => {
     return state.allTemplates[category]
-  }, 
+  },
   getTemplateById: (state) => (category, id) => {
     return state.allTemplates[category].find(template => template.id == id)
-  } 
+  },
+  getPhotos: (state) => state.images
 }
