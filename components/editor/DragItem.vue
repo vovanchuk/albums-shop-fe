@@ -7,13 +7,15 @@
     @dragging="resize"
     :parentLimitation="true"
   >
-    <div class="wrapper" :style="{backgroundImage: `url(${image.base64})`}">
+    <!--<div class="wrapper" :style="{backgroundImage: `url(${image.base64})`}">
       <b-button @click="onAddImage">Add Image</b-button>
 
       <ImagePicker
         v-model="showModal"
         @choose="onImagePicked"
       />
+    </div>-->
+    <div class="wrapper" v-on:drop="drop" v-on:dragover="allowDrop" style="background-color:lightgray">
     </div>
   </vue-drag-resize>
 </template>
@@ -44,7 +46,16 @@ export default {
     },
     onAddImage() {
       this.showModal = true
-    }
+    },
+    allowDrop(e) {
+        e.preventDefault();
+    },
+    drop(e) {
+        e.preventDefault();
+        var data = e.dataTransfer.getData("text");
+        var urlString = 'url(' + data +')'
+        e.target.style.backgroundImage = urlString;
+    },
   }
 }
 </script>
@@ -53,5 +64,8 @@ export default {
 .wrapper {
   width: 100%;
   height: 100%;
+  background-position: center;
+  background: no-repeat;
+  background-size: cover;
 }
 </style>

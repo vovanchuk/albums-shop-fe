@@ -23,12 +23,14 @@ export default {
   css: [
     '~/assets/css/main.scss',
     'tui-image-editor/dist/tui-image-editor.css',
+    'vue-advanced-cropper/dist/style.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/tui-editor.js', mode: 'client' },
     { src: '~/plugins/drag-resize.js', mode: 'client' },
+    { src: '~/plugins/cropper.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -3,7 +3,12 @@
     <div class="horizontal-scrollable mb-3">
       <b-row class="mb-3">
         <div class="preview-div" v-for="(item, index) in images" :key="index">
-          <b-img v-if="item.base64" :src="item.base64"/>
+          <b-img 
+            v-if="item.base64" 
+            :src="item.base64" 
+            draggable="true"
+            v-on:dragstart="drag"
+            />
           <div class="buttons d-flex justify-content-end">
             <b-button variant="outline-primary" class="mr-1" @click="setCurrentImageIndex(index)">
               <b-icon icon="pencil"></b-icon>
@@ -95,7 +100,10 @@ export default {
     setCurrentImageIndex(idx) {
       this.currentImageIndex = idx
       this.$bvModal.show('modal')
-    }
+    },
+    drag(e) {
+      e.dataTransfer.setData("text", e.target.src);
+    },
   },
   computed: {
     currentImage() {
