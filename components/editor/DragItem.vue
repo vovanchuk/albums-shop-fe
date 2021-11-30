@@ -1,61 +1,101 @@
 <template>
   <vue-drag-resize
-    :isActive="true"
     :w="200"
     :h="200"
+    :z="this.zIndex"
     @resizing="resize"
     @dragging="resize"
     :parentLimitation="true"
+    @activated="showButtons"
+    @deactivated="hideButtons"
   >
-    <!--<div class="wrapper" :style="{backgroundImage: `url(${image.base64})`}">
-      <b-button @click="onAddImage">Add Image</b-button>
-
-      <ImagePicker
-        v-model="showModal"
-        @choose="onImagePicked"
-      />
-    </div>-->
-    <div class="wrapper" v-on:drop="drop" v-on:dragover="allowDrop" style="background-color:lightgray">
+    <div class="wrapper" :ref="index" @drop="drop" @dragover="allowDrop" style="background-color:lightgray">
+      <b-button-group v-show="active">
+        <b-button class="transparent" @click="editPhoto">
+          <b-icon icon="pencil"></b-icon>
+        </b-button>
+        <b-button class="transparent" @click="toFront">
+          <b-icon icon="front"></b-icon>
+        </b-button>
+        <b-button class="transparent" @click="toBack">
+          <b-icon icon="back"></b-icon>
+        </b-button>
+      </b-button-group>
     </div>
   </vue-drag-resize>
 </template>
 
 <script>
-import ImagePicker from "~/components/editor/ImagePicker";
 export default {
-  components: {ImagePicker},
+  props: {
+    index: {
+      type: Number
+    }
+  },
   data() {
     return {
       width: 0,
       height: 0,
       top: 0,
       left: 0,
-      showModal: false,
-      image: {},
+      active: false,
+      imageIndex: null,
     }
   },
   methods: {
-    onImagePicked(image) {
-      this.image = image
-    },
     resize(newRect) {
       this.width = newRect.width;
       this.height = newRect.height;
       this.top = newRect.top;
       this.left = newRect.left;
     },
-    onAddImage() {
-      this.showModal = true
-    },
     allowDrop(e) {
-        e.preventDefault();
+      e.preventDefault();
     },
     drop(e) {
-        e.preventDefault();
-        var data = e.dataTransfer.getData("text");
-        var urlString = 'url(' + data +')'
-        e.target.style.backgroundImage = urlString;
+      e.preventDefault();
+      var id = e.dataTransfer.getData("text");
+      var url = this.images[id].base64
+      var urlString = 'url(' + url + ')'
+      e.target.style.backgroundImage = urlString;
+      this.active = true; 
+      var obj = this.images[id]
+      const newObj = {
+        base64: obj.base64,
+        file: obj.file
+      }
+      this.$store.commit('ADD_IMAGE_TO_ALBUM', {id: id, base64: obj.base64, file: obj.file, zIndex: this.index, itemId: this.index})
+      this.imageIndex = id
     },
+    showButtons(){
+      this.active = true; 
+    },
+    hideButtons(){
+      this.active = false; 
+    },
+    editPhoto() {
+      this.$emit('onEdit', {imageIndex: this.imageIndex, itemIndex: this.index})
+    },
+    toFront(){
+      this.$store.commit('CHANGE_Z_TO_TOP', this.index)
+      this.$forceUpdate()
+    },
+    toBack(){
+      this.$store.commit('CHANGE_Z_TO_BOTTOM', this.index)
+      this.$forceUpdate()
+    }
+  },
+  computed: {
+    zIndex() {
+      var obj = this.$store.getters.getPhotoFromAlbumById(this.index) 
+      return obj ? obj.zIndex : this.index
+    },
+    imagesFromAlbum() {
+      return this.$store.getters['getPhotosFromAlbum']
+    },
+    images() {
+      return this.$store.getters['getPhotos']
+    }
   }
 }
 </script>
@@ -67,5 +107,11 @@ export default {
   background-position: center;
   background: no-repeat;
   background-size: cover;
+}
+.transparent{
+  background-color: white;
+  border: 1px gray solid;
+  border-radius: 0px;
+  color: black;
 }
 </style>

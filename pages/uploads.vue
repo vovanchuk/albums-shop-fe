@@ -6,13 +6,11 @@
           <b-img 
             v-if="item.base64" 
             :src="item.base64" 
+            :id="index"
             draggable="true"
-            v-on:dragstart="drag"
+            @dragstart="drag"
             />
-          <div class="buttons d-flex justify-content-end">
-            <b-button variant="outline-primary" class="mr-1" @click="setCurrentImageIndex(index)">
-              <b-icon icon="pencil"></b-icon>
-            </b-button>
+          <div class="buttons d-flex ">
             <b-button variant="outline-primary" @click="deleteImage(index)">
               <b-icon icon="x"></b-icon>
             </b-button>
@@ -28,7 +26,7 @@
       multiple
     ></b-form-file>
     <div class="canvas">
-        <DragItem v-for="(idx) in DRAG_LIMIT" :key="idx" />
+        <DragItem v-for="(idx) in DRAG_LIMIT" ref="elements" :key="idx" :index="idx" @onEdit="setCurrentImageIndex"/>
     </div>
     <div>
       <b-modal
@@ -41,7 +39,7 @@
         @ok="updateImage"
       >
         <div class="d-flex justify-content-center">
-          <EditPhoto ref="modal" :image="currentImage"/>
+          <EditPhoto ref="modal" :image="currentImage.base64"/>
         </div>
       </b-modal>
     </div>
@@ -55,13 +53,13 @@ export default {
   components: {DragItem},
   data() {
     return {
-      // previews: [],
+      currentItemIndex: null,
       currentImageIndex: null,
       DRAG_LIMIT: DRAG_LIMIT
     }
   },
   methods: {
-    async updateImage(e) {
+    /*async updateImage(e) {
       const base64Image = this.$refs['modal'].$refs['tuiImageEditor'].invoke('toDataURL')
       const currentImage = this.images[this.currentImageIndex]
       const filename = currentImage.file
@@ -70,8 +68,24 @@ export default {
         base64: base64Image,
         file: await this.dataUrlToFile(base64Image, filename)
       }
-
       this.$store.commit('UPDATE_IMAGE_BY_INDEX', {newObj, idx: this.currentImageIndex})
+      this.$forceUpdate()
+    },
+    */
+    async updateImage(e) {
+      const base64Image = this.$refs['modal'].$refs['tuiImageEditor'].invoke('toDataURL')
+      const currentImage = this.$store.getters.getPhotoFromAlbumById(this.currentItemIndex) 
+
+      var element = this.$refs['elements'][this.currentItemIndex-1].$refs[this.currentItemIndex]
+      var urlString = 'url(' + base64Image + ')'
+      element.style.backgroundImage = urlString;
+
+      const filename = currentImage.file
+      const newObj = {
+        base64: base64Image,
+        file: await this.dataUrlToFile(base64Image, filename)
+      }
+      this.$store.commit('UPDATE_IMAGE_FROM_ALBUM_BY_INDEX', {newObj, idx: this.currentItemIndex})
       this.$forceUpdate()
     },
     async dataUrlToFile(dataUrl, fileName) {
@@ -97,22 +111,26 @@ export default {
     deleteImage(index) {
       this.$store.commit('DELETE_IMAGE_BY_INDEX', index)
     },
-    setCurrentImageIndex(idx) {
-      this.currentImageIndex = idx
-      this.$bvModal.show('modal')
-    },
     drag(e) {
-      e.dataTransfer.setData("text", e.target.src);
+      e.dataTransfer.setData("text", e.target.id);
     },
+    setCurrentImageIndex(data){
+      this.currentImageIndex = data.imageIndex
+      this.currentItemIndex = data.itemIndex
+      this.$bvModal.show('modal')
+    }
   },
   computed: {
     currentImage() {
-      return this.images[this.currentImageIndex]?.base64 || ''
+      var obj = this.$store.getters.getPhotoFromAlbumById(this.currentItemIndex) 
+      return obj ? obj : ''
     },
     images() {
-      console.log('newimages')
       return this.$store.getters['getPhotos']
-    }
+    },
+    imagesFromAlbum() {
+      return this.$store.getters['getPhotosFromAlbum']
+    },
   }
 }
 </script>

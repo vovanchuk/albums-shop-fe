@@ -49,7 +49,14 @@ export const state = () => ({
       { id: 6, url: 'wedding-modern.jpg', title: ''},
     ]
   },
-  images: []
+  images: [],
+  imagesFromAlbum: [
+    {id:  1, base64: '', file: null, zIndex: 1, orgImageId: null},
+    {id:  2, base64: '', file: null, zIndex: 2, orgImageId: null},
+    {id:  3, base64: '', file: null, zIndex: 3, orgImageId: null},
+    {id:  4, base64: '', file: null, zIndex: 4, orgImageId: null},
+    {id:  5, base64: '', file: null, zIndex: 5, orgImageId: null}
+  ],
 })
 
 
@@ -57,14 +64,49 @@ export const mutations = {
   ADD_IMAGE(state, imageObj) {
     state.images.push(imageObj)
   },
+  ADD_IMAGE_TO_ALBUM(state, imageObj) {
+    var obj = state.imagesFromAlbum.find(image => image.id === imageObj.itemId)
+    obj.base64 = imageObj.base64
+    obj.file = imageObj.file
+    obj.zIndex = imageObj.itemId
+    obj.orgImageId = imageObj.id
+  },
   DELETE_IMAGE_BY_INDEX(state, idx){
     state.images.splice(idx, 1)
   },
   UPDATE_IMAGE_BY_INDEX(state, {newObj, idx}) {
-    console.log(newObj)
-    console.log(idx)
     state.images[idx] = newObj
-  }
+  },
+  UPDATE_IMAGE_FROM_ALBUM_BY_INDEX(state, {newObj, idx}) {
+    var obj = state.imagesFromAlbum.find(image => image.id === idx)
+    obj.base64 = newObj.base64
+    obj.file = newObj.file
+  },
+  CHANGE_Z_TO_BOTTOM(state, id) {
+    var obj = state.imagesFromAlbum.find(image => image.id === id)
+    if (obj.zIndex === 1){
+      return
+    }
+    obj.zIndex = 1
+    state.imagesFromAlbum.forEach((image) => {
+      if(image.id !== id && image.zIndex !== state.imagesFromAlbum.length){
+        image.zIndex = image.zIndex + 1
+      }
+    })
+  },
+
+  CHANGE_Z_TO_TOP(state, id) {
+    var obj = state.imagesFromAlbum.find(image => image.id === id)
+    if (obj.zIndex === state.imagesFromAlbum.length){
+      return
+    }
+    obj.zIndex = state.imagesFromAlbum.length
+    state.imagesFromAlbum.forEach((image) => {
+      if(image.id !== id && image.zIndex !== 1){
+        image.zIndex = image.zIndex - 1
+      }
+    })
+  },
 }
 
 export const getters = {
@@ -74,5 +116,7 @@ export const getters = {
   getTemplateById: (state) => (category, id) => {
     return state.allTemplates[category].find(template => template.id == id)
   },
-  getPhotos: (state) => state.images
+  getPhotos: (state) => state.images,
+  getPhotosFromAlbum: (state) => state.imagesFromAlbum,
+  getPhotoFromAlbumById: (state) => (id) => state.imagesFromAlbum.find(image => image.id === id)
 }
