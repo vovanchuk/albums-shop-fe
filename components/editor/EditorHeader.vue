@@ -15,12 +15,31 @@
             <b-card-text>Elementy</b-card-text>
           </b-tab>
           <b-tab title="Tło">
-            <b-card-text>Tło</b-card-text>
+            <Background/>
           </b-tab>
           <b-tab title="Tekst">
-            <b-card-text>Tekst</b-card-text>
+            <TextFields/>
           </b-tab>
         </b-tabs>
       </b-card>
     </div>
 </template>
+
+<script>
+import Background from './Background.vue'
+import Photos from './Photos.vue'
+import TextFields from './TextFields.vue'
+export default {
+  components: {
+    Photos,
+    Background,
+    TextFields
+  },
+}
+</script>
+
+<style>
+  .editor-header .tab-pane{
+    padding: 5px;
+  }
+</style>

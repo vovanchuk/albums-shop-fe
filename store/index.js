@@ -50,13 +50,28 @@ export const state = () => ({
     ]
   },
   images: [],
-  imagesFromAlbum: [
-    {id:  1, base64: '', file: null, zIndex: 1, orgImageId: null},
-    {id:  2, base64: '', file: null, zIndex: 2, orgImageId: null},
-    {id:  3, base64: '', file: null, zIndex: 3, orgImageId: null},
-    {id:  4, base64: '', file: null, zIndex: 4, orgImageId: null},
-    {id:  5, base64: '', file: null, zIndex: 5, orgImageId: null}
-  ],
+  pages: {
+    1: {
+      'elements': [],
+      'backgroundImage': 'color',
+      'backgroundColor': '#fff',
+    },
+    2: [
+      {id:  1, base64: '', file: null, zIndex: 1, orgImageId: null},
+      {id:  2, base64: '', file: null, zIndex: 2, orgImageId: null},
+      {id:  3, base64: '', file: null, zIndex: 3, orgImageId: null},
+      {id:  4, base64: '', file: null, zIndex: 4, orgImageId: null},
+      {id:  5, base64: '', file: null, zIndex: 5, orgImageId: null}
+    ],
+    3: [
+      {id:  1, base64: '', file: null, zIndex: 1, orgImageId: null},
+      {id:  2, base64: '', file: null, zIndex: 2, orgImageId: null},
+      {id:  3, base64: '', file: null, zIndex: 3, orgImageId: null},
+      {id:  4, base64: '', file: null, zIndex: 4, orgImageId: null},
+      {id:  5, base64: '', file: null, zIndex: 5, orgImageId: null}
+    ]
+  },
+  currentPage: 1,
 })
 
 
@@ -64,8 +79,17 @@ export const mutations = {
   ADD_IMAGE(state, imageObj) {
     state.images.push(imageObj)
   },
-  ADD_IMAGE_TO_ALBUM(state, imageObj) {
-    var obj = state.imagesFromAlbum.find(image => image.id === imageObj.itemId)
+  ADD_ELEMENT(state, type){
+    var page = state.pages[state.currentPage]['elements']
+    var id = page.length + 1
+    if(type === 'image')
+      page.push({id:  id, base64: '', file: null, zIndex: 1, orgImageId: null, type: 'image'})
+    else
+      page.push({id:  id, text: 'Dodaj tekst', zIndex: 1, type: 'text'})
+  },
+  ADD_IMAGE_TO_PAGE(state, imageObj) {
+    var page = state.pages[state.currentPage]['elements']
+    var obj = page.find(image => image.id === imageObj.itemId)
     obj.base64 = imageObj.base64
     obj.file = imageObj.file
     obj.zIndex = imageObj.itemId
@@ -77,36 +101,50 @@ export const mutations = {
   UPDATE_IMAGE_BY_INDEX(state, {newObj, idx}) {
     state.images[idx] = newObj
   },
-  UPDATE_IMAGE_FROM_ALBUM_BY_INDEX(state, {newObj, idx}) {
-    var obj = state.imagesFromAlbum.find(image => image.id === idx)
+  UPDATE_IMAGE_FROM_PAGE_BY_INDEX(state, {newObj, idx}) {
+    var page = state.pages[state.currentPage]['elements']
+    var obj = page.find(image => image.id === idx)
     obj.base64 = newObj.base64
     obj.file = newObj.file
   },
   CHANGE_Z_TO_BOTTOM(state, id) {
-    var obj = state.imagesFromAlbum.find(image => image.id === id)
+    var page = state.pages[state.currentPage]['elements']
+    var obj = page.find(image => image.id === id)
     if (obj.zIndex === 1){
       return
     }
     obj.zIndex = 1
-    state.imagesFromAlbum.forEach((image) => {
-      if(image.id !== id && image.zIndex !== state.imagesFromAlbum.length){
+    page.forEach((image) => {
+      if(image.id !== id && image.zIndex !== page.length){
         image.zIndex = image.zIndex + 1
       }
     })
   },
-
   CHANGE_Z_TO_TOP(state, id) {
-    var obj = state.imagesFromAlbum.find(image => image.id === id)
-    if (obj.zIndex === state.imagesFromAlbum.length){
+    var page = state.pages[state.currentPage]['elements']
+    var obj = page.find(image => image.id === id)
+    if (obj.zIndex === page.length){
       return
     }
-    obj.zIndex = state.imagesFromAlbum.length
-    state.imagesFromAlbum.forEach((image) => {
+    obj.zIndex = page.length
+    page.forEach((image) => {
       if(image.id !== id && image.zIndex !== 1){
         image.zIndex = image.zIndex - 1
       }
     })
   },
+  CHANGE_CURRENT_PAGE(state, number){
+    state.currentPage = number
+  },
+  UPDATE_BG_IMAGE(state, newBg){
+    var page = state.pages[state.currentPage]
+    page['backgroundImage'] = newBg
+  },
+  UPDATE_BG_COLOR(state, newBg){
+    var page = state.pages[state.currentPage]
+    page['backgroundImage'] = 'color'
+    page['backgroundColor'] = newBg
+  }
 }
 
 export const getters = {
@@ -117,6 +155,13 @@ export const getters = {
     return state.allTemplates[category].find(template => template.id == id)
   },
   getPhotos: (state) => state.images,
-  getPhotosFromAlbum: (state) => state.imagesFromAlbum,
-  getPhotoFromAlbumById: (state) => (id) => state.imagesFromAlbum.find(image => image.id === id)
+  getPhotosFromPage: (state) => state.pages[state.currentPage]['elements'].filter(element => element.type === 'image'),
+  getTextFieldsFromPage: (state) => state.pages[state.currentPage]['elements'].filter(element => element.type === 'text'),
+  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'].find(element => element.id === id),
+  getPages: (state) => state.pages,
+  getPageById: (state) => (id) => state.pages[id],
+  getCurrentPage: (state) => state.currentPage,
+  getPageBackgroundImage: (state) => state.pages[state.currentPage]['backgroundImage'],
+  getPageBackgroundColor: (state) => state.pages[state.currentPage]['backgroundColor']
+
 }

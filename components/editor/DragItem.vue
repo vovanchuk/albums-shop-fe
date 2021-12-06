@@ -30,6 +30,9 @@ export default {
   props: {
     index: {
       type: Number
+    },
+    page: {
+      type: Number
     }
   },
   data() {
@@ -60,11 +63,7 @@ export default {
       e.target.style.backgroundImage = urlString;
       this.active = true; 
       var obj = this.images[id]
-      const newObj = {
-        base64: obj.base64,
-        file: obj.file
-      }
-      this.$store.commit('ADD_IMAGE_TO_ALBUM', {id: id, base64: obj.base64, file: obj.file, zIndex: this.index, itemId: this.index})
+      this.$store.commit('ADD_IMAGE_TO_PAGE', {id: id, base64: obj.base64, file: obj.file, zIndex: this.index, itemId: this.index})
       this.imageIndex = id
     },
     showButtons(){
@@ -87,11 +86,11 @@ export default {
   },
   computed: {
     zIndex() {
-      var obj = this.$store.getters.getPhotoFromAlbumById(this.index) 
+      var obj = this.$store.getters.getElementFromCurrentPage(this.index) 
       return obj ? obj.zIndex : this.index
     },
-    imagesFromAlbum() {
-      return this.$store.getters['getPhotosFromAlbum']
+    photosFromPage() {
+      return this.$store.getters['getPhotosFromPage']
     },
     images() {
       return this.$store.getters['getPhotos']

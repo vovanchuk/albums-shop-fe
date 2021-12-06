@@ -23,7 +23,7 @@ export default {
   css: [
     '~/assets/css/main.scss',
     'tui-image-editor/dist/tui-image-editor.css',
-    'vue-advanced-cropper/dist/style.css'
+    'vue-advanced-cropper/dist/style.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
