@@ -56,20 +56,16 @@ export const state = () => ({
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
     },
-    2: [
-      {id:  1, base64: '', file: null, zIndex: 1, orgImageId: null},
-      {id:  2, base64: '', file: null, zIndex: 2, orgImageId: null},
-      {id:  3, base64: '', file: null, zIndex: 3, orgImageId: null},
-      {id:  4, base64: '', file: null, zIndex: 4, orgImageId: null},
-      {id:  5, base64: '', file: null, zIndex: 5, orgImageId: null}
-    ],
-    3: [
-      {id:  1, base64: '', file: null, zIndex: 1, orgImageId: null},
-      {id:  2, base64: '', file: null, zIndex: 2, orgImageId: null},
-      {id:  3, base64: '', file: null, zIndex: 3, orgImageId: null},
-      {id:  4, base64: '', file: null, zIndex: 4, orgImageId: null},
-      {id:  5, base64: '', file: null, zIndex: 5, orgImageId: null}
-    ]
+    2: {
+      'elements': [],
+      'backgroundImage': 'color',
+      'backgroundColor': '#fff',
+    },
+    3: {
+      'elements': [],
+      'backgroundImage': 'color',
+      'backgroundColor': '#fff',
+    },
   },
   currentPage: 1,
 })
@@ -93,6 +89,10 @@ export const mutations = {
     obj.base64 = imageObj.base64
     obj.file = imageObj.file
     obj.zIndex = imageObj.itemId
+    obj.width = imageObj.width
+    obj.height = imageObj.height
+    obj.top = imageObj.top
+    obj.left = imageObj.left
     obj.orgImageId = imageObj.id
   },
   DELETE_IMAGE_BY_INDEX(state, idx){
@@ -133,8 +133,21 @@ export const mutations = {
       }
     })
   },
+  RESIZE_ELEMENT(state, {newSize, idx}){
+    var page = state.pages[state.currentPage]['elements']
+    var obj = page.find(image => image.id === idx)
+    obj.width = newSize.width
+    obj.height = newSize.height
+    obj.top = newSize.top
+    obj.left = newSize.left
+  },
   CHANGE_CURRENT_PAGE(state, number){
     state.currentPage = number
+  },
+  ADD_PAGE(state){
+    var key = Object.keys(state.pages).length + 1
+    var newObj = {[key] : {'elements': [], 'backgroundImage': 'color','backgroundColor': '#fff'}}
+    Object.assign(state.pages, newObj)
   },
   UPDATE_BG_IMAGE(state, newBg){
     var page = state.pages[state.currentPage]
@@ -144,7 +157,13 @@ export const mutations = {
     var page = state.pages[state.currentPage]
     page['backgroundImage'] = 'color'
     page['backgroundColor'] = newBg
-  }
+  },
+  DELETE_ELEMENT(state, id) {
+    var page = state.pages[state.currentPage]['elements']
+    var newPage = page.filter((image) => image.id !== id)
+    console.log(newPage)
+    state.pages[state.currentPage]['elements'] = newPage
+  },
 }
 
 export const getters = {
@@ -162,6 +181,5 @@ export const getters = {
   getPageById: (state) => (id) => state.pages[id],
   getCurrentPage: (state) => state.currentPage,
   getPageBackgroundImage: (state) => state.pages[state.currentPage]['backgroundImage'],
-  getPageBackgroundColor: (state) => state.pages[state.currentPage]['backgroundColor']
-
+  getPageBackgroundColor: (state) => state.pages[state.currentPage]['backgroundColor'],
 }

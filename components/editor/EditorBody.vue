@@ -1,10 +1,14 @@
 <template>
   <div class="container">
     <div>
-      <Page v-for="(page, idx) in pages" :key="idx" :index="idx" ref="pages" @onEdit="setCurrentImageIndex"/>
+      <Page v-for="(page, idx) in pages" :key="idx" :index="idx" ref="page" @onEdit="setCurrentImageIndex"/>
     </div>
-    <div class="d-flex justify-content-center">
-      <b-button-group class="mt-3 mb-3 align-items-center">
+    <div class="d-flex justify-content-between align-items-center mt-3 mb-3 ">
+      <div>
+        <b-button variant="link" @click="addPage">Dodaj stronę</b-button>
+        <b-button variant="link" @click="removePage">Usuń stronę</b-button>
+      </div>
+      <b-button-group class="align-items-center">
         <b-button @click="previousPage">
           <b-icon icon="chevron-compact-left"></b-icon>
         </b-button>
@@ -15,6 +19,10 @@
           <b-icon icon="chevron-compact-right"></b-icon>
         </b-button>
       </b-button-group>
+      <div>
+        <b-button variant="link">Akcja 1</b-button>
+        <b-button variant="link">Akcja 2</b-button>
+      </div>
     </div>
     <b-modal
       id="modal"
@@ -49,18 +57,25 @@ export default {
       this.$store.commit('CHANGE_CURRENT_PAGE', number)
     },
     nextPage(){
-      if(this.currentPage === 3)
+      if(this.currentPage === Object.keys(this.pages).length)
         return
       var number = this.currentPage + 1
       this.$store.commit('CHANGE_CURRENT_PAGE', number)
     },
+    addPage(){
+      this.$store.commit('ADD_PAGE')
+      this.$forceUpdate()
+    },
+    removePage(){
+    },
     async updateImage(e) {
+      console.log(this.$refs['page'][this.currentPage-1].$refs['elements'][this.currentItemIndex-1].$refs[this.currentItemIndex])
       const base64Image = this.$refs['modal'].$refs['tuiImageEditor'].invoke('toDataURL')
-      var element = this.$refs['pages'][this.currentPage-1].$refs['elements'][this.currentItemIndex-1].$refs[this.currentItemIndex]
+      var element = this.$refs['page'][this.currentPage-1].$refs['elements'][this.currentItemIndex-1].$refs[this.currentItemIndex]
       var urlString = 'url(' + base64Image + ')'
       element.style.backgroundImage = urlString
 
-      const currentImage = this.$store.getters.getPhotoFromCurrentPage(this.currentItemIndex)
+      const currentImage = this.$store.getters.getElementFromCurrentPage(this.currentItemIndex)
       const filename = currentImage.file
       const newObj = {
         base64: base64Image,

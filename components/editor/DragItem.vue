@@ -1,15 +1,17 @@
 <template>
   <vue-drag-resize
-    :w="200"
-    :h="200"
+    :w="this.width"
+    :h="this.height"
     :z="this.zIndex"
+    :x="this.left"
+    :y="this.top"
     @resizing="resize"
     @dragging="resize"
     :parentLimitation="true"
     @activated="showButtons"
     @deactivated="hideButtons"
   >
-    <div class="wrapper" :ref="index" @drop="drop" @dragover="allowDrop" style="background-color:lightgray">
+    <div class="wrapper" :ref="index" @drop="drop" @dragover="allowDrop"  :style="[ image ? {'background-image': 'url(' + image + ')'} : {'background-color': 'lightgray'}]">
       <b-button-group v-show="active">
         <b-button class="transparent" @click="editPhoto">
           <b-icon icon="pencil"></b-icon>
@@ -19,6 +21,9 @@
         </b-button>
         <b-button class="transparent" @click="toBack">
           <b-icon icon="back"></b-icon>
+        </b-button>
+        <b-button class="transparent" @click="deleteElement">
+          <b-icon icon="x"></b-icon>
         </b-button>
       </b-button-group>
     </div>
@@ -37,33 +42,30 @@ export default {
   },
   data() {
     return {
-      width: 0,
-      height: 0,
-      top: 0,
-      left: 0,
       active: false,
       imageIndex: null,
     }
   },
   methods: {
-    resize(newRect) {
-      this.width = newRect.width;
-      this.height = newRect.height;
-      this.top = newRect.top;
-      this.left = newRect.left;
-    },
     allowDrop(e) {
       e.preventDefault();
     },
     drop(e) {
       e.preventDefault();
       var id = e.dataTransfer.getData("text");
-      var url = this.images[id].base64
-      var urlString = 'url(' + url + ')'
-      e.target.style.backgroundImage = urlString;
       this.active = true; 
       var obj = this.images[id]
-      this.$store.commit('ADD_IMAGE_TO_PAGE', {id: id, base64: obj.base64, file: obj.file, zIndex: this.index, itemId: this.index})
+      this.$store.commit('ADD_IMAGE_TO_PAGE', {
+        id: id, 
+        base64: obj.base64, 
+        file: obj.file, 
+        zIndex: this.index, 
+        itemId: this.index, 
+        width: 200,
+        height: 200,
+        top: 0,
+        left: 0,
+      })
       this.imageIndex = id
     },
     showButtons(){
@@ -82,6 +84,15 @@ export default {
     toBack(){
       this.$store.commit('CHANGE_Z_TO_BOTTOM', this.index)
       this.$forceUpdate()
+    },
+    resize(newRect) {
+      var obj = {width: newRect.width, height: newRect.height, top: newRect.top, left: newRect.left}
+      this.$store.commit('RESIZE_ELEMENT', {newSize: obj, idx: this.index})
+      this.$forceUpdate()
+    },
+    deleteElement(){
+      this.$store.commit('DELETE_ELEMENT', this.index)
+      this.$forceUpdate()
     }
   },
   computed: {
@@ -89,11 +100,31 @@ export default {
       var obj = this.$store.getters.getElementFromCurrentPage(this.index) 
       return obj ? obj.zIndex : this.index
     },
+    width(){
+      var obj = this.$store.getters.getElementFromCurrentPage(this.index) 
+      return obj ? obj.width : this.index
+    },
+    height(){
+      var obj = this.$store.getters.getElementFromCurrentPage(this.index) 
+      return obj ? obj.height : this.index
+    },
+    top(){
+      var obj = this.$store.getters.getElementFromCurrentPage(this.index) 
+      return obj ? obj.top : this.index
+    },
+    left(){
+      var obj = this.$store.getters.getElementFromCurrentPage(this.index) 
+      return obj ? obj.left : this.index
+    },
     photosFromPage() {
       return this.$store.getters['getPhotosFromPage']
     },
     images() {
       return this.$store.getters['getPhotos']
+    },
+    image(){
+      var obj = this.$store.getters.getElementFromCurrentPage(this.index) 
+      return obj.base64
     }
   }
 }

@@ -1,9 +1,10 @@
 <template>
-    <div class="canvas mt-3" :ref="index" v-show="active" :style="[ bgImage !== 'color' ? {'background-image': 'url(' + bgImage + ')'} : {'background-color': bgColor}]">
-        <DragItem v-for="item in images" ref="elements" :key="item.id" :index="item.id" @onEdit="editPhoto"/>
-        <DragText v-for="item in textFields" :key="item.id" :index="item.id"/>
- </div>
-
+    <div class="page">
+        <div class="canvas mt-3" :ref="index" v-if="active" :style="[ bgImage !== 'color' ? {'background-image': 'url(' + bgImage + ')'} : {'background-color': bgColor}]">
+            <DragItem v-for="item in images" ref="elements" :key="item.id" :index="item.id" @onEdit="editPhoto"/>
+            <DragText v-for="item in textFields" :key="item.id" :index="item.id"/>
+        </div>
+    </div>
 </template>
 
 <script>
