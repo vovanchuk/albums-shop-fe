@@ -50,26 +50,25 @@ export const state = () => ({
     ]
   },
   images: [],
-  pages: {
-    1: {
+  pages: [
+    {
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
     },
-    2: {
+    {
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
     },
-    3: {
+    {
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
     },
-  },
-  currentPage: 1,
+  ],
+  currentPage: 0,
 })
-
 
 export const mutations = {
   ADD_IMAGE(state, imageObj) {
@@ -77,23 +76,18 @@ export const mutations = {
   },
   ADD_ELEMENT(state, type){
     var page = state.pages[state.currentPage]['elements']
-    var id = page.length + 1
     if(type === 'image')
-      page.push({id:  id, base64: '', file: null, zIndex: 1, orgImageId: null, type: 'image'})
+      page.push({ base64: '', file: null, orgImageId: null, zIndex: 1, width: 200, height: 200, top: 0, left: 0, type: 'image'})
     else
-      page.push({id:  id, text: 'Dodaj tekst', zIndex: 1, type: 'text'})
+      page.push({ text: 'Dodaj tekst', zIndex: 1, width: 200, height: 200, top: 0, left: 0, type: 'text'})
   },
   ADD_IMAGE_TO_PAGE(state, imageObj) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page.find(image => image.id === imageObj.itemId)
+    var obj = page[imageObj.itemId]
     obj.base64 = imageObj.base64
     obj.file = imageObj.file
-    obj.zIndex = imageObj.itemId
-    obj.width = imageObj.width
-    obj.height = imageObj.height
-    obj.top = imageObj.top
-    obj.left = imageObj.left
-    obj.orgImageId = imageObj.id
+    obj.orgImageId = imageObj.orgImageId
+    obj.zIndex = imageObj.zIndex
   },
   DELETE_IMAGE_BY_INDEX(state, idx){
     state.images.splice(idx, 1)
@@ -103,39 +97,39 @@ export const mutations = {
   },
   UPDATE_IMAGE_FROM_PAGE_BY_INDEX(state, {newObj, idx}) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page.find(image => image.id === idx)
+    var obj = page[idx]
     obj.base64 = newObj.base64
     obj.file = newObj.file
   },
   CHANGE_Z_TO_BOTTOM(state, id) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page.find(image => image.id === id)
+    var obj = page[id]
     if (obj.zIndex === 1){
       return
     }
     obj.zIndex = 1
     page.forEach((image) => {
-      if(image.id !== id && image.zIndex !== page.length){
+      if(image !== obj && image.zIndex !== page.length){
         image.zIndex = image.zIndex + 1
       }
     })
   },
   CHANGE_Z_TO_TOP(state, id) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page.find(image => image.id === id)
+    var obj = page[id]
     if (obj.zIndex === page.length){
       return
     }
     obj.zIndex = page.length
     page.forEach((image) => {
-      if(image.id !== id && image.zIndex !== 1){
+      if(image !== obj && image.zIndex !== 1){
         image.zIndex = image.zIndex - 1
       }
     })
   },
   RESIZE_ELEMENT(state, {newSize, idx}){
     var page = state.pages[state.currentPage]['elements']
-    var obj = page.find(image => image.id === idx)
+    var obj = page[idx]
     obj.width = newSize.width
     obj.height = newSize.height
     obj.top = newSize.top
@@ -145,9 +139,11 @@ export const mutations = {
     state.currentPage = number
   },
   ADD_PAGE(state){
-    var key = Object.keys(state.pages).length + 1
-    var newObj = {[key] : {'elements': [], 'backgroundImage': 'color','backgroundColor': '#fff'}}
-    Object.assign(state.pages, newObj)
+    state.pages.splice(state.currentPage, 0 , {'elements': [], 'backgroundImage': 'color','backgroundColor': '#fff'})
+  },
+  REMOVE_PAGE(state, number){
+    state.pages.splice(state.currentPage, 1)
+    state.currentPage = number
   },
   UPDATE_BG_IMAGE(state, newBg){
     var page = state.pages[state.currentPage]
@@ -160,9 +156,7 @@ export const mutations = {
   },
   DELETE_ELEMENT(state, id) {
     var page = state.pages[state.currentPage]['elements']
-    var newPage = page.filter((image) => image.id !== id)
-    console.log(newPage)
-    state.pages[state.currentPage]['elements'] = newPage
+    page.splice(id, 1)
   },
 }
 
@@ -176,7 +170,7 @@ export const getters = {
   getPhotos: (state) => state.images,
   getPhotosFromPage: (state) => state.pages[state.currentPage]['elements'].filter(element => element.type === 'image'),
   getTextFieldsFromPage: (state) => state.pages[state.currentPage]['elements'].filter(element => element.type === 'text'),
-  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'].find(element => element.id === id),
+  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'][id],
   getPages: (state) => state.pages,
   getPageById: (state) => (id) => state.pages[id],
   getCurrentPage: (state) => state.currentPage,

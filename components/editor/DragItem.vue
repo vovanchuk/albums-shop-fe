@@ -52,19 +52,15 @@ export default {
     },
     drop(e) {
       e.preventDefault();
-      var id = e.dataTransfer.getData("text");
+      var id = e.dataTransfer.getData("text")
       this.active = true; 
       var obj = this.images[id]
       this.$store.commit('ADD_IMAGE_TO_PAGE', {
-        id: id, 
+        orgImageId: id, 
         base64: obj.base64, 
         file: obj.file, 
-        zIndex: this.index, 
+        zIndex: this.index + 1, 
         itemId: this.index, 
-        width: 200,
-        height: 200,
-        top: 0,
-        left: 0,
       })
       this.imageIndex = id
     },

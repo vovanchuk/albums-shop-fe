@@ -13,15 +13,15 @@
           <b-icon icon="chevron-compact-left"></b-icon>
         </b-button>
         <b-button disabled>
-          {{currentPage}}
+          {{currentPage + 1}}
         </b-button>
         <b-button @click="nextPage">
           <b-icon icon="chevron-compact-right"></b-icon>
         </b-button>
       </b-button-group>
       <div>
-        <b-button variant="link">Akcja 1</b-button>
-        <b-button variant="link">Akcja 2</b-button>
+        <b-button variant="link">Cofnij</b-button>
+        <b-button variant="link">Powtórz</b-button>
       </div>
     </div>
     <b-modal
@@ -51,27 +51,33 @@ export default {
   },
     methods:{
     previousPage(){
-      if(this.currentPage === 1)
+      if(this.currentPage == 0)
         return
       var number = this.currentPage - 1
       this.$store.commit('CHANGE_CURRENT_PAGE', number)
     },
     nextPage(){
-      if(this.currentPage === Object.keys(this.pages).length)
+      if(this.currentPage == Object.keys(this.pages).length - 1)
         return
       var number = this.currentPage + 1
       this.$store.commit('CHANGE_CURRENT_PAGE', number)
     },
     addPage(){
       this.$store.commit('ADD_PAGE')
-      this.$forceUpdate()
     },
     removePage(){
+      if(Object.keys(this.pages).length == 1)
+        return
+      var number
+      if(this.currentPage == 0)
+        number = this.currentPage 
+      else
+        number = this.currentPage - 1
+      this.$store.commit('REMOVE_PAGE', number)
     },
     async updateImage(e) {
-      console.log(this.$refs['page'][this.currentPage-1].$refs['elements'][this.currentItemIndex-1].$refs[this.currentItemIndex])
       const base64Image = this.$refs['modal'].$refs['tuiImageEditor'].invoke('toDataURL')
-      var element = this.$refs['page'][this.currentPage-1].$refs['elements'][this.currentItemIndex-1].$refs[this.currentItemIndex]
+      var element = this.$refs['page'][this.currentPage].$refs['elements'][this.currentItemIndex].$refs[this.currentItemIndex]
       var urlString = 'url(' + base64Image + ')'
       element.style.backgroundImage = urlString
 
@@ -82,7 +88,6 @@ export default {
         file: await this.dataUrlToFile(base64Image, filename)
       }
       this.$store.commit('UPDATE_IMAGE_FROM_PAGE_BY_INDEX', {newObj, idx: this.currentItemIndex})
-      this.$forceUpdate()
     },
     async dataUrlToFile(dataUrl, fileName) {
       const res = await fetch(dataUrl);
@@ -93,7 +98,7 @@ export default {
       this.currentImageIndex = data.imageIndex
       this.currentItemIndex = data.itemIndex
       this.$bvModal.show('modal')
-    },
+    }
   },
   computed: {
     currentPage() {

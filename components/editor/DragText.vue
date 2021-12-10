@@ -60,11 +60,9 @@ export default {
     },
     toFront(){
       this.$store.commit('CHANGE_Z_TO_TOP', this.index)
-      this.$forceUpdate()
     },
     toBack(){
       this.$store.commit('CHANGE_Z_TO_BOTTOM', this.index)
-      this.$forceUpdate()
     },
     editText(){
 

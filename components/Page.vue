@@ -1,8 +1,8 @@
 <template>
     <div class="page">
         <div class="canvas mt-3" :ref="index" v-if="active" :style="[ bgImage !== 'color' ? {'background-image': 'url(' + bgImage + ')'} : {'background-color': bgColor}]">
-            <DragItem v-for="item in images" ref="elements" :key="item.id" :index="item.id" @onEdit="editPhoto"/>
-            <DragText v-for="item in textFields" :key="item.id" :index="item.id"/>
+            <DragItem v-for="(item, idx) in images" ref="elements" :key="idx" :index="idx" @onEdit="editPhoto"/>
+            <DragText v-for="(item, idx) in textFields" :key="idx" :index="idx"/>
         </div>
     </div>
 </template>
@@ -14,7 +14,7 @@ export default {
     components: {DragItem, DragText},
     props: {
         index: {
-            type: String
+            type: Number
         }
     },
     methods: {
