@@ -53,10 +53,10 @@ export default {
       this.left = newRect.left;
     },
     showButtons(){
-      this.active = true; 
+      this.active = true;
     },
     hideButtons(){
-      this.active = false; 
+      this.active = false;
     },
     toFront(){
       this.$store.commit('CHANGE_Z_TO_TOP', this.index)
@@ -67,16 +67,16 @@ export default {
       this.$forceUpdate()
     },
     editText(){
-
+      this.$emit('onEdit')
     }
   },
   computed: {
     zIndex() {
-      var obj = this.$store.getters.getElementFromCurrentPage(this.index) 
+      var obj = this.$store.getters.getElementFromCurrentPage(this.index)
       return obj ? obj.zIndex : this.index
     },
     element(){
-      return this.$store.getters.getElementFromCurrentPage(this.index) 
+      return this.$store.getters.getElementFromCurrentPage(this.index)
     }
   }
 }
