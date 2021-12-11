@@ -31,6 +31,7 @@ export default {
     { src: '~/plugins/tui-editor.js', mode: 'client' },
     { src: '~/plugins/drag-resize.js', mode: 'client' },
     { src: '~/plugins/cropper.js', mode: 'client' },
+    { src: '~/plugins/ck-editor.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

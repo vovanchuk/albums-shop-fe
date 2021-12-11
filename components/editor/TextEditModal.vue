@@ -5,23 +5,21 @@
     size="xl"
     ok-title="Zatwierdź zmiany"
     ok-variant="outline-primary"
+    @ok="onOk"
     cancel-title="Anuluj"
   >
-    <div class="d-flex justify-content-center" style="height: 71vh;">
+    <div class="d-flex justify-content-center" style="height: 71vh; width: 100%">
       <client-only>
-        <editor-content :editor="editor" />
-        <editor />
+        <ckeditor :editor="editor" v-model="editorText" :config="editorConfig" style="width: 100%"></ckeditor>
       </client-only>
     </div>
   </b-modal>
 </template>
 
 <script>
-import { Editor, EditorContent } from '@tiptap/vue-2'
-import StarterKit from '@tiptap/starter-kit'
+import CustomEditor from '~/plugins/ck-editor/ckeditor'
 
 export default {
-  components: {EditorContent},
   props: {
     value: {
       type: Boolean,
@@ -33,20 +31,20 @@ export default {
   },
   data() {
     return {
-      editor: null
+      editor: CustomEditor,
+      editorText: '',
+      editorConfig: {
+        height: '600px'
+      }
+    }
+  },
+  methods: {
+    onOk() {
+      this.$emit('update:text', this.editorText)
     }
   },
   mounted() {
-    console.log('mounted')
-    this.editor = new Editor({
-      content: '<p>I’m running Tiptap with Vue.js. 🎉</p>',
-      extensions: [
-        StarterKit,
-      ],
-    })
-  },
-  beforeDestroy() {
-    this.editor.destroy()
+    this.editorText = this.text
   },
   computed: {
     open: {
@@ -56,11 +54,22 @@ export default {
       set(newVal) {
         this.$emit('input', newVal)
       }
-    }
+    },
   }
 }
 </script>
 
 <style scoped>
 
+</style>
+<style>
+.ck-editor {
+  width: 100% !important;
+}
+.ck-editor__main {
+  height: 95%;
+}
+.ck-editor__editable {
+  height: 100%;
+}
 </style>

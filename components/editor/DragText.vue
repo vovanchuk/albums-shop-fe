@@ -10,7 +10,7 @@
     @deactivated="hideButtons"
   >
     <div class="wrapper" :ref="index">
-        <p>{{element.text}}</p>
+      <div v-html="element.text"></div>
       <b-button-group v-show="active" style="position: absolute">
         <b-button class="transparent" @click="editText">
           <b-icon icon="pencil"></b-icon>

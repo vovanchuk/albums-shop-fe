@@ -34,7 +34,7 @@
     <TextEditModal
       v-if="textModalOpen"
       v-model="textModalOpen"
-      :text="currentText"
+      :text.sync="currentText"
     ></TextEditModal>
     <b-modal
       id="modal"
@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     onTextEdit(id) {
-      console.log('asdzxc')
       this.currentItemIndex = id
       this.textModalOpen = true
     },
@@ -122,14 +121,24 @@ export default {
       return this.$store.getters['getPages']
     },
     currentImage() {
-      var obj = this.$store.getters.getElementFromCurrentPage(this.currentItemIndex)
-      return obj ? obj : ''
+      return this.$store.getters.getElementFromCurrentPage(this.currentItemIndex)
     },
     imagesFromPage() {
       return this.$store.getters['getPhotosFromPage']
     },
-    currentText() {
-      return this.currentImage?.type === 'text' ? this.currentImage.text : null
+    currentText: {
+      get() {
+        return this.currentImage?.type === 'text' ? this.currentImage.text : null
+      },
+      set(newVal) {
+        if (this.currentImage?.type === 'text') {
+          this.$store.commit('UPDATE_ELEMENT', {
+            id: this.currentItemIndex,
+            newEl: {...this.currentImage, ...{text: newVal}}
+          })
+          this.$forceUpdate()
+        }
+      }
     }
   }
 }
