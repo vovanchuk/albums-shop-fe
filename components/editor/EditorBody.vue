@@ -25,6 +25,9 @@
           <b-icon icon="chevron-compact-right"></b-icon>
         </b-button>
       </b-button-group>
+      <div>
+        <b-button variant="link" @click="generatePdf">Generate</b-button>
+      </div>
     </div>
     <TextEditModal
       v-if="textModalOpen"
@@ -49,7 +52,9 @@
 
 <script>
 
-import TextEditModal from "~/components/editor/TextEditModal";
+import TextEditModal from "~/components/editor/TextEditModal"
+import * as htmlToImage from 'html-to-image'
+import jsPDF from 'jspdf'
 
 export default {
   components: {TextEditModal},
@@ -60,6 +65,35 @@ export default {
     }
   },
   methods:{
+    async generatePdf() {
+      const elements = document.getElementsByClassName('page');
+      const images = []
+
+      const promises = Array.from(elements).map((element) => {
+        return new Promise(resolve => htmlToImage.toPng(element).then((dataUrl) => {
+          images.push(dataUrl)
+          resolve()
+        }))
+      })
+      await Promise.all(promises)
+
+      var doc = new jsPDF({
+        orientation: 'landscape',
+        unit: 'cm',
+        format: [10, 15]
+      });
+
+      var width = doc.internal.pageSize.getWidth();
+      var height = doc.internal.pageSize.getHeight();
+      for(let i = 0; i < images.length; i++) {
+        if(i !== 0) {
+          doc.addPage()
+        }
+        doc.addImage(images[i], 'JPEG', 0, 0, width, height);
+      }
+
+      doc.save("file.pdf");
+    },
     onTextEdit(id) {
       this.currentItemIndex = id
       this.textModalOpen = true
