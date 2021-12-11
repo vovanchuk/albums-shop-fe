@@ -62,7 +62,7 @@ export default {
   background: no-repeat;
   background-size: cover;
   border: 1px solid rgba(0, 0, 0, 0.125);
-  height: 500px;
-  width: 500px;
+  height: var(--canvas-height);
+  width: var(--canvas-width);
 }
 </style>

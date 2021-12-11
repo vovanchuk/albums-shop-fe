@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :style="canvasVars">
     <div class="d-flex justify-content-center flex-column">
       <div
         v-for="(page, idx) in pages"
@@ -67,6 +67,10 @@ export default {
     return {
       currentItemIndex: null,
       textModalOpen: false,
+      size: {
+        width: 500,
+        height: 500
+      }
     }
   },
   methods:{
@@ -89,8 +93,8 @@ export default {
 
       var doc = new jsPDF({
         orientation: 'landscape',
-        unit: 'cm',
-        format: [10, 15]
+        unit: 'pt',
+        format: [this.size.height, this.size.width]
       });
 
       var width = doc.internal.pageSize.getWidth()
@@ -156,6 +160,12 @@ export default {
     }
   },
   computed: {
+    canvasVars() {
+      return {
+        '--canvas-height': this.size.height + 'px',
+        '--canvas-width': this.size.width + 'px',
+      }
+    },
     loading() {
       return this.$store.getters['getLoading']
     },
