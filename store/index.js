@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 export const state = () => ({
   allTemplates: {
     'wedding': [
@@ -49,6 +50,46 @@ export const state = () => ({
       { id: 6, url: 'wedding-modern.jpg', title: ''},
     ]
   },
+  layouts: {
+    1 : [
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 498, height: 498, top: 0, left: 0, type: 'image'}
+    ],
+    2 : [
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 498, top: 0, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 498, top: 0, left: 253, type: 'image'}
+    ],
+    3 : [
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 498, height: 245, top: 0, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 498, height: 245, top: 253, left: 0, type: 'image'}
+    ],
+    4 : [
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 245, top: 0, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 245, top: 0, left: 253, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 498, height: 245, top: 253, left: 0, type: 'image'}
+    ],
+    5 : [
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 498, top: 0, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 245, top: 0, left: 253, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 245, height: 245, top: 253, left: 253, type: 'image'}
+    ],
+    6 : [
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 163, height: 330, top: 0, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 330, height: 330, top: 0, left: 168, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 498, height: 163, top: 335, left: 0, type: 'image'},
+    ],
+    7 : [
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 245, top: 0, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 245, top: 0, left: 253, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 245, height: 245, top: 253, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 4, width: 245, height: 245, top: 253, left: 253, type: 'image'}
+    ],
+    8 : [
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 330, height: 330, top: 0, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 330, height: 163, top: 335, left: 0, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 163, height: 330, top: 168, left: 335, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 4, width: 163, height: 163, top: 0, left: 335, type: 'image'}
+    ]
+  },
   images: [],
   frames: [
     {
@@ -67,19 +108,22 @@ export const state = () => ({
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
-      'frame': null
+      'frame': null,
+      'currentLayout' : 0
     },
     {
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
-      'frame': null
+      'frame': null,
+      'currentLayout' : 0
     },
     {
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
-      'frame': null
+      'frame': null,
+      'currentLayout' : 0
     },
   ],
   currentPage: 0,
@@ -96,18 +140,27 @@ export const mutations = {
   },
   ADD_ELEMENT(state, type){
     var page = state.pages[state.currentPage]['elements']
+    var id = uuidv4()
+    var z = state.pages[state.currentPage]['elements'].length + 1
     if(type === 'image')
-      page.push({ base64: '', file: null, orgImageId: null, zIndex: 1, width: 200, height: 200, top: 0, left: 0, type: 'image'})
-    else
-      page.push({ text: 'Dodaj tekst', zIndex: 1, width: 200, height: 200, top: 0, left: 0, type: 'text'})
+      page.push({ id: id, base64: '', file: null, orgImageId: null, zIndex: z, width: 200, height: 200, top: 0, left: 0, type: 'image'})
+    else if(type === 'text')
+      page.push({ id: id, text: 'Dodaj tekst', zIndex: 1, width: 200, height: 200, top: 0, left: 0, type: 'text'})
+  },
+  ADD_LAYOUT_ELEMENT(state, element){
+    var page = state.pages[state.currentPage]['elements']
+    var id = uuidv4()
+    var z = state.pages[state.currentPage]['elements'].length + 1
+    element['zIndex'] = z
+    element['id'] = id
+    page.push(element)
   },
   ADD_IMAGE_TO_PAGE(state, imageObj) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page[imageObj.itemId]
+    var obj = page.find(element => element.id == imageObj.itemId)
     obj.base64 = imageObj.base64
     obj.file = imageObj.file
     obj.orgImageId = imageObj.orgImageId
-    obj.zIndex = imageObj.zIndex
   },
   DELETE_IMAGE_BY_INDEX(state, idx){
     state.images.splice(idx, 1)
@@ -117,13 +170,13 @@ export const mutations = {
   },
   UPDATE_IMAGE_FROM_PAGE_BY_INDEX(state, {newObj, idx}) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page[idx]
+    var obj = page.find(element => element.id == idx)
     obj.base64 = newObj.base64
     obj.file = newObj.file
   },
   CHANGE_Z_TO_BOTTOM(state, id) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page[id]
+    var obj = page.find(element => element.id == id)
     if (obj.zIndex === 1){
       return
     }
@@ -136,7 +189,7 @@ export const mutations = {
   },
   CHANGE_Z_TO_TOP(state, id) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page[id]
+    var obj = page.find(element => element.id == id)
     if (obj.zIndex === page.length){
       return
     }
@@ -149,7 +202,7 @@ export const mutations = {
   },
   RESIZE_ELEMENT(state, {newSize, idx}){
     var page = state.pages[state.currentPage]['elements']
-    var obj = page[idx]
+    var obj = page.find(element => element.id == idx)
     obj.width = newSize.width
     obj.height = newSize.height
     obj.top = newSize.top
@@ -159,7 +212,7 @@ export const mutations = {
     state.currentPage = number
   },
   ADD_PAGE(state){
-    state.pages.splice(state.currentPage, 0 , {'elements': [], 'backgroundImage': 'color','backgroundColor': '#fff'})
+    state.pages.splice(state.currentPage, 0 , {'elements': [], 'backgroundImage': 'color','backgroundColor': '#fff', 'currentLayout' : 0})
   },
   REMOVE_PAGE(state, number){
     state.pages.splice(state.currentPage, 1)
@@ -176,7 +229,11 @@ export const mutations = {
   },
   DELETE_ELEMENT(state, id) {
     var page = state.pages[state.currentPage]['elements']
-    page.splice(id, 1)
+    var newPage = page.filter((element) => element.id !== id)
+    state.pages[state.currentPage]['elements'] = newPage
+  },
+  DELETE_ALL_ELEMENTS(state){
+    state.pages[state.currentPage]['elements'] = []
   },
   UPDATE_ELEMENT(state, {id, newEl}) {
     const elIdx = state.pages[state.currentPage]['elements'].findIndex(element => element.id === id)
@@ -184,6 +241,10 @@ export const mutations = {
       Vue.set(state.pages[state.currentPage]['elements'], elIdx, newEl)
       // state.pages[state.currentPage]['elements'][elIdx] = newEl
     }
+  },
+  UPDATE_LAYOUT(state, id){
+    var page = state.pages[state.currentPage]
+    page['current_layout'] = id
   }
 }
 
@@ -197,12 +258,11 @@ export const getters = {
   getPhotos: (state) => state.images,
   getPhotosFromPage: (state) => state.pages[state.currentPage]['elements'].filter(element => element.type === 'image'),
   getTextFieldsFromPage: (state) => state.pages[state.currentPage]['elements'].filter(element => element.type === 'text'),
-  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'][id] ?? '',
+  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'].find(element => element.id === id) ?? '',
   getPages: (state) => state.pages,
   getPageById: (state) => (id) => state.pages[id],
   getCurrentPage: (state) => state.currentPage,
-  getPageBackgroundImage: (state) => state.pages[state.currentPage]['backgroundImage'],
-  getPageBackgroundColor: (state) => state.pages[state.currentPage]['backgroundColor'],
   getFrames: (state) => state.frames,
-  getCurrentPageData: (state) => state.pages[state.currentPage]
+  getCurrentPageData: (state) => state.pages[state.currentPage],
+  getElementsFromLayout: (state) => (id) => state.layouts[id]
 }

@@ -1,11 +1,10 @@
 <template>
   <div class="container">
-    <div>
+    <div class="d-flex justify-content-center">
       <Page
         v-for="(page, idx) in pages"
         :key="idx"
         :index="idx"
-        ref="page"
         @onEdit="setCurrentImageIndex"
         @setCurrent="onTextEdit"
       />
@@ -26,10 +25,6 @@
           <b-icon icon="chevron-compact-right"></b-icon>
         </b-button>
       </b-button-group>
-      <div>
-        <b-button variant="link">Cofnij</b-button>
-        <b-button variant="link">Powtórz</b-button>
-      </div>
     </div>
     <TextEditModal
       v-if="textModalOpen"
@@ -97,10 +92,6 @@ export default {
     },
     async updateImage(e) {
       const base64Image = this.$refs['modal'].$refs['tuiImageEditor'].invoke('toDataURL')
-      var element = this.$refs['page'][this.currentPage].$refs['elements'][this.currentItemIndex].$refs[this.currentItemIndex]
-      var urlString = 'url(' + base64Image + ')'
-      element.style.backgroundImage = urlString
-
       const currentImage = this.$store.getters.getElementFromCurrentPage(this.currentItemIndex)
       const filename = currentImage.file
       const newObj = {
@@ -153,12 +144,5 @@ export default {
 <style lang="scss">
 .tui-image-editor-header {
   display: none;
-}
-
-.canvas {
-  height: 600px;
-  width: 100%;
-  position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.125);
 }
 </style>
