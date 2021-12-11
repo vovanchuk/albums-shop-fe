@@ -9,7 +9,7 @@
             <b-card-text>Układ</b-card-text>
           </b-tab>
           <b-tab title="Ramki">
-            <b-card-text>Ramki</b-card-text>
+            <Frames />
           </b-tab>
           <b-tab title="Elementy">
             <b-card-text>Elementy</b-card-text>
@@ -28,12 +28,14 @@
 <script>
 import Background from './Background.vue'
 import Photos from './Photos.vue'
+import Frames from '~/components/editor/Frames'
 import TextFields from './TextFields.vue'
 export default {
   components: {
     Photos,
     Background,
-    TextFields
+    TextFields,
+    Frames
   },
 }
 </script>

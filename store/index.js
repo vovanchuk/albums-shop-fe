@@ -50,21 +50,36 @@ export const state = () => ({
     ]
   },
   images: [],
+  frames: [
+    {
+      id: Date.now(),
+      name: 'Frame1',
+      url: require('~/assets/images/frames/Grunge_Frames.png')
+    },
+    {
+      id: Date.now() + 1,
+      name: 'Empty',
+      url: null
+    }
+  ],
   pages: [
     {
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
+      'frame': null
     },
     {
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
+      'frame': null
     },
     {
       'elements': [],
       'backgroundImage': 'color',
       'backgroundColor': '#fff',
+      'frame': null
     },
   ],
   currentPage: 0,
@@ -73,6 +88,9 @@ export const state = () => ({
 import Vue from 'vue'
 
 export const mutations = {
+  SET_CURRENT_PAGE_FRAME(state, frame) {
+    state.pages[state.currentPage].frame = frame
+  },
   ADD_IMAGE(state, imageObj) {
     state.images.push(imageObj)
   },
@@ -185,4 +203,6 @@ export const getters = {
   getCurrentPage: (state) => state.currentPage,
   getPageBackgroundImage: (state) => state.pages[state.currentPage]['backgroundImage'],
   getPageBackgroundColor: (state) => state.pages[state.currentPage]['backgroundColor'],
+  getFrames: (state) => state.frames,
+  getCurrentPageData: (state) => state.pages[state.currentPage]
 }
