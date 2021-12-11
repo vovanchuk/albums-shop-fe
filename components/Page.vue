@@ -1,6 +1,6 @@
 <template>
-  <div class="page" v-if="active">
-    <div class="canvas mt-3" :ref="index"
+  <div class="page" :class="{'d-none': !active}">
+    <div class="canvas" :ref="index"
          :style="[ bgImage !== 'color' ? {'background-image': 'url(' + bgImage + ')'} : {'background-color': bgColor}]">
       <img v-if="pageData.frame && pageData.frame.url" :src="pageData.frame.url" alt="" class="page-frame">
       <DragItem v-for="(item, idx) in images" ref="elements" :key="idx" :index="idx" @onEdit="editPhoto"/>
