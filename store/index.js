@@ -70,6 +70,8 @@ export const state = () => ({
   currentPage: 0,
 })
 
+import Vue from 'vue'
+
 export const mutations = {
   ADD_IMAGE(state, imageObj) {
     state.images.push(imageObj)
@@ -158,6 +160,13 @@ export const mutations = {
     var page = state.pages[state.currentPage]['elements']
     page.splice(id, 1)
   },
+  UPDATE_ELEMENT(state, {id, newEl}) {
+    const elIdx = state.pages[state.currentPage]['elements'].findIndex(element => element.id === id)
+    if(elIdx >= 0) {
+      Vue.set(state.pages[state.currentPage]['elements'], elIdx, newEl)
+      // state.pages[state.currentPage]['elements'][elIdx] = newEl
+    }
+  }
 }
 
 export const getters = {
@@ -170,7 +179,7 @@ export const getters = {
   getPhotos: (state) => state.images,
   getPhotosFromPage: (state) => state.pages[state.currentPage]['elements'].filter(element => element.type === 'image'),
   getTextFieldsFromPage: (state) => state.pages[state.currentPage]['elements'].filter(element => element.type === 'text'),
-  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'][id],
+  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'][id] ?? '',
   getPages: (state) => state.pages,
   getPageById: (state) => (id) => state.pages[id],
   getCurrentPage: (state) => state.currentPage,

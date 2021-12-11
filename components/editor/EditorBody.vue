@@ -1,7 +1,14 @@
 <template>
   <div class="container">
     <div>
-      <Page v-for="(page, idx) in pages" :key="idx" :index="idx" ref="page" @onEdit="setCurrentImageIndex"/>
+      <Page
+        v-for="(page, idx) in pages"
+        :key="idx"
+        :index="idx"
+        ref="page"
+        @onEdit="setCurrentImageIndex"
+        @setCurrent="onTextEdit"
+      />
     </div>
     <div class="d-flex justify-content-between align-items-center mt-3 mb-3 ">
       <div>
@@ -13,7 +20,7 @@
           <b-icon icon="chevron-compact-left"></b-icon>
         </b-button>
         <b-button disabled>
-          {{currentPage + 1}}
+          {{ currentPage + 1 }}
         </b-button>
         <b-button @click="nextPage">
           <b-icon icon="chevron-compact-right"></b-icon>
@@ -24,6 +31,11 @@
         <b-button variant="link">Powtórz</b-button>
       </div>
     </div>
+    <TextEditModal
+      v-if="textModalOpen"
+      v-model="textModalOpen"
+      :text.sync="currentText"
+    ></TextEditModal>
     <b-modal
       id="modal"
       title="Edytuj zdjęcie"
@@ -42,35 +54,43 @@
 
 <script>
 
+import TextEditModal from "~/components/editor/TextEditModal";
+
 export default {
+  components: {TextEditModal},
   data() {
     return {
       currentItemIndex: null,
-      currentImageIndex: null,
+      textModalOpen: false,
     }
   },
-    methods:{
+  methods:{
+    onTextEdit(id) {
+      this.currentItemIndex = id
+      this.textModalOpen = true
+    },
     previousPage(){
-      if(this.currentPage == 0)
+      if(this.currentPage === 0)
         return
       var number = this.currentPage - 1
       this.$store.commit('CHANGE_CURRENT_PAGE', number)
     },
     nextPage(){
-      if(this.currentPage == Object.keys(this.pages).length - 1)
+      if(this.currentPage === Object.keys(this.pages).length - 1)
         return
       var number = this.currentPage + 1
       this.$store.commit('CHANGE_CURRENT_PAGE', number)
     },
-    addPage(){
+    addPage() {
       this.$store.commit('ADD_PAGE')
+      this.$forceUpdate()
     },
     removePage(){
-      if(Object.keys(this.pages).length == 1)
+      if(Object.keys(this.pages).length === 1)
         return
       var number
-      if(this.currentPage == 0)
-        number = this.currentPage 
+      if(this.currentPage === 0)
+        number = this.currentPage
       else
         number = this.currentPage - 1
       this.$store.commit('REMOVE_PAGE', number)
@@ -94,8 +114,7 @@ export default {
       const blob = await res.blob();
       return new File([blob], fileName, {type: 'image/png'});
     },
-    setCurrentImageIndex(data){
-      this.currentImageIndex = data.imageIndex
+    setCurrentImageIndex(data) {
       this.currentItemIndex = data.itemIndex
       this.$bvModal.show('modal')
     }
@@ -108,12 +127,25 @@ export default {
       return this.$store.getters['getPages']
     },
     currentImage() {
-      var obj = this.$store.getters.getElementFromCurrentPage(this.currentItemIndex) 
-      return obj ? obj : ''
+      return this.$store.getters.getElementFromCurrentPage(this.currentItemIndex)
     },
     imagesFromPage() {
       return this.$store.getters['getPhotosFromPage']
     },
+    currentText: {
+      get() {
+        return this.currentImage?.type === 'text' ? this.currentImage.text : null
+      },
+      set(newVal) {
+        if (this.currentImage?.type === 'text') {
+          this.$store.commit('UPDATE_ELEMENT', {
+            id: this.currentItemIndex,
+            newEl: {...this.currentImage, ...{text: newVal}}
+          })
+          this.$forceUpdate()
+        }
+      }
+    }
   }
 }
 </script>
@@ -122,6 +154,7 @@ export default {
 .tui-image-editor-header {
   display: none;
 }
+
 .canvas {
   height: 600px;
   width: 100%;

@@ -2,7 +2,7 @@
     <div class="page">
         <div class="canvas mt-3" :ref="index" v-if="active" :style="[ bgImage !== 'color' ? {'background-image': 'url(' + bgImage + ')'} : {'background-color': bgColor}]">
             <DragItem v-for="(item, idx) in images" ref="elements" :key="idx" :index="idx" @onEdit="editPhoto"/>
-            <DragText v-for="(item, idx) in textFields" :key="idx" :index="idx"/>
+            <DragText v-for="(item, idx) in textFields" :key="idx" :index="idx" @onEdit="onTextEdit(item.id)"/>
         </div>
     </div>
 </template>
@@ -18,6 +18,9 @@ export default {
         }
     },
     methods: {
+      onTextEdit(id) {
+        this.$emit('setCurrent', id)
+      },
         editPhoto(data){
             this.$emit('onEdit', {imageIndex: data.imageIndex, itemIndex: data.itemIndex})
         },
@@ -33,11 +36,9 @@ export default {
             return this.$store.getters['getTextFieldsFromPage']
         },
         active(){
-            if(this.index == this.currentPage)
-                return true
-            return false
+          return +this.index === this.currentPage
         },
-        bgImage() { 
+        bgImage() {
             return this.$store.getters['getPageBackgroundImage']
         },
         bgColor(){
