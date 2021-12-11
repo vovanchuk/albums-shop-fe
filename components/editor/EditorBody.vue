@@ -1,13 +1,18 @@
 <template>
   <div class="container">
-    <div class="d-flex justify-content-center">
-      <Page
+    <div class="d-flex justify-content-center flex-column">
+      <div
         v-for="(page, idx) in pages"
-        :key="idx"
-        :index="idx"
-        @onEdit="setCurrentImageIndex"
-        @setCurrent="onTextEdit"
-      />
+      >
+        <Page
+          v-if="currentPage === idx || loading"
+          :key="idx"
+          :page="page"
+          :index="idx"
+          @onEdit="setCurrentImageIndex"
+          @setCurrent="onTextEdit"
+        />
+      </div>
     </div>
     <div class="d-flex justify-content-between align-items-center mt-3 mb-3 ">
       <div>
@@ -66,16 +71,21 @@ export default {
   },
   methods:{
     async generatePdf() {
-      const elements = document.getElementsByClassName('page');
+      this.$store.commit('SET_LOADING', true)
+      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      const elements = document.getElementsByClassName('canvas')
       const images = []
 
       const promises = Array.from(elements).map((element) => {
-        return new Promise(resolve => htmlToImage.toPng(element).then((dataUrl) => {
-          images.push(dataUrl)
-          resolve()
-        }))
+        return new Promise(resolve => {
+          resolve(htmlToImage.toPng(element))
+        })
       })
-      await Promise.all(promises)
+      for (const promise of promises) {
+        const data = await Promise.resolve(promise)
+        images.push(data)
+      }
 
       var doc = new jsPDF({
         orientation: 'landscape',
@@ -83,16 +93,17 @@ export default {
         format: [10, 15]
       });
 
-      var width = doc.internal.pageSize.getWidth();
-      var height = doc.internal.pageSize.getHeight();
+      var width = doc.internal.pageSize.getWidth()
+      var height = doc.internal.pageSize.getHeight()
       for(let i = 0; i < images.length; i++) {
         if(i !== 0) {
           doc.addPage()
         }
-        doc.addImage(images[i], 'JPEG', 0, 0, width, height);
+        doc.addImage(images[i], 'JPEG', 0, 0, width, height)
       }
 
-      doc.save("file.pdf");
+      doc.save("file.pdf")
+      this.$store.commit('SET_LOADING', false)
     },
     onTextEdit(id) {
       this.currentItemIndex = id
@@ -145,6 +156,9 @@ export default {
     }
   },
   computed: {
+    loading() {
+      return this.$store.getters['getLoading']
+    },
     currentPage() {
       return this.$store.getters['getCurrentPage']
     },

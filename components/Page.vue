@@ -1,23 +1,29 @@
 <template>
-  <div class="page" v-if="active">
-    <div class="canvas mt-3"
-        :style="[ pageData.backgroundImage  !== 'color' ? {'background-image': 'url(' + pageData.backgroundImage + ')'} : {'background-color': pageData.backgroundColor}]">
-      <img v-if="pageData.frame && pageData.frame.url" :src="pageData.frame.url" alt="" class="page-frame">
-      <DragItem v-for="item in images"  :key="item.id" :index="item.id" @onEdit="editPhoto"/>
+  <div
+    class="page"
+  >
+    <div class="canvas"
+        :style="[ page.backgroundImage  !== 'color' ? {'background-image': 'url(' + page.backgroundImage + ')'} : {'background-color': page.backgroundColor}]">
+      <img v-if="page.frame && page.frame.url" :src="page.frame.url" alt="" class="page-frame">
+      <DragItem v-for="item in images" :item="item" :key="item.id" :index="item.id" @onEdit="editPhoto"/>
       <DragText v-for="item in textFields" :key="item.id" :index="item.id" @onEdit="onTextEdit(item.id)"/>
     </div>
   </div>
 </template>
 
 <script>
-import DragItem from "~/components/editor/DragItem";
-import DragText from "~/components/editor/DragText";
+import DragItem from "~/components/editor/DragItem"
+import DragText from "~/components/editor/DragText"
 
 export default {
   components: {DragItem, DragText},
   props: {
     index: {
       type: Number
+    },
+    page: {
+      type: Object,
+      required: true
     }
   },
   methods: {
@@ -29,20 +35,11 @@ export default {
     },
   },
   computed: {
-    pageData() {
-      return this.$store.getters['getCurrentPageData']
-    },
-    currentPage() {
-      return this.$store.getters['getCurrentPage']
-    },
     images() {
-      return this.$store.getters['getPhotosFromPage']
+      return this.page.elements.filter(el => el.type === 'image')
     },
     textFields() {
-      return this.$store.getters['getTextFieldsFromPage']
-    },
-    active() {
-      return +this.index === this.currentPage
+      return this.page.elements.filter(el => el.type === 'text')
     },
   },
 }

@@ -1,10 +1,10 @@
 <template>
   <vue-drag-resize
-    :w="element.width"
-    :h="element.height"
-    :z="element.zIndex"
-    :x="element.left"
-    :y="element.top"
+    :w="item.width"
+    :h="item.height"
+    :z="item.zIndex"
+    :x="item.left"
+    :y="item.top"
     :minw="150"
     :minh="150"
     @resizing="resize"
@@ -13,7 +13,7 @@
     @activated="showButtons"
     @deactivated="hideButtons"
   >
-    <div class="wrapper" @drop="drop" @dragover="allowDrop" :style="[ element.base64 ? {'background-image': 'url(' + element.base64  + ')'} : {'background-color': 'lightgray'}]">
+    <div class="wrapper" @drop="drop" @dragover="allowDrop" :style="[ item.base64 ? {'background-image': 'url(' + item.base64  + ')'} : {'background-color': 'lightgray'}]">
       <b-button-group v-show="active">
         <b-button class="transparent" @click="editPhoto">
           <b-icon icon="pencil"></b-icon>
@@ -38,8 +38,8 @@ export default {
     index: {
       type: String
     },
-    page: {
-      type: Number
+    item: {
+      type: Object
     }
   },
   data() {
@@ -57,18 +57,18 @@ export default {
       var id = e.dataTransfer.getData("text")
       var obj = this.images[id]
       this.$store.commit('ADD_IMAGE_TO_PAGE', {
-        orgImageId: id, 
-        base64: obj.base64, 
-        file: obj.file, 
-        itemId: this.index, 
+        orgImageId: id,
+        base64: obj.base64,
+        file: obj.file,
+        itemId: this.index,
       })
       this.imageIndex = id
     },
     showButtons(){
-      this.active = true; 
+      this.active = true;
     },
     hideButtons(){
-      this.active = false; 
+      this.active = false;
     },
     editPhoto() {
       this.$emit('onEdit', {imageIndex: this.imageIndex, itemIndex: this.index})
@@ -88,9 +88,6 @@ export default {
     }
   },
   computed: {
-    element(){
-      return this.$store.getters.getElementFromCurrentPage(this.index) 
-    },
     images() {
       return this.$store.getters['getPhotos']
     },

@@ -127,11 +127,15 @@ export const state = () => ({
     },
   ],
   currentPage: 0,
+  loading: false
 })
 
 import Vue from 'vue'
 
 export const mutations = {
+  SET_LOADING(state, payload) {
+    state.loading = payload
+  },
   SET_CURRENT_PAGE_FRAME(state, frame) {
     state.pages[state.currentPage].frame = frame
   },
@@ -264,5 +268,6 @@ export const getters = {
   getCurrentPage: (state) => state.currentPage,
   getFrames: (state) => state.frames,
   getCurrentPageData: (state) => state.pages[state.currentPage],
-  getElementsFromLayout: (state) => (id) => state.layouts[id]
+  getElementsFromLayout: (state) => (id) => state.layouts[id],
+  getLoading: (state) => state.loading
 }
