@@ -1,10 +1,10 @@
 <template>
-  <div class="page" :class="{'d-none': !active}">
-    <div class="canvas" :ref="index"
-         :style="[ bgImage !== 'color' ? {'background-image': 'url(' + bgImage + ')'} : {'background-color': bgColor}]">
+  <div class="page" v-if="active">
+    <div class="canvas mt-3"
+        :style="[ pageData.backgroundImage  !== 'color' ? {'background-image': 'url(' + pageData.backgroundImage + ')'} : {'background-color': pageData.backgroundColor}]">
       <img v-if="pageData.frame && pageData.frame.url" :src="pageData.frame.url" alt="" class="page-frame">
-      <DragItem v-for="(item, idx) in images" ref="elements" :key="idx" :index="idx" @onEdit="editPhoto"/>
-      <DragText v-for="(item, idx) in textFields" :key="idx" :index="idx" @onEdit="onTextEdit(item.id)"/>
+      <DragItem v-for="item in images"  :key="item.id" :index="item.id" @onEdit="editPhoto"/>
+      <DragText v-for="item in textFields" :key="item.id" :index="item.id" @onEdit="onTextEdit(item.id)"/>
     </div>
   </div>
 </template>
@@ -44,12 +44,6 @@ export default {
     active() {
       return +this.index === this.currentPage
     },
-    bgImage() {
-      return this.$store.getters['getPageBackgroundImage']
-    },
-    bgColor() {
-      return this.$store.getters['getPageBackgroundColor']
-    }
   },
 }
 </script>
@@ -70,5 +64,8 @@ export default {
   background-position: center;
   background: no-repeat;
   background-size: cover;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  height: 500px;
+  width: 500px;
 }
 </style>

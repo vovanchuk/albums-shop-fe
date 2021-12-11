@@ -1,8 +1,10 @@
 <template>
   <vue-drag-resize
-    :w="200"
-    :h="20"
-    :z="this.zIndex"
+    :w="element.width"
+    :h="element.height"
+    :z="element.zIndex"
+    :x="element.left"
+    :y="element.top"
     @resizing="resize"
     @dragging="resize"
     :parentLimitation="true"
@@ -21,6 +23,9 @@
         <b-button class="transparent" @click="toBack">
           <b-icon icon="back"></b-icon>
         </b-button>
+        <b-button class="transparent" @click="deleteElement">
+          <b-icon icon="x"></b-icon>
+        </b-button>
       </b-button-group>
     </div>
   </vue-drag-resize>
@@ -30,7 +35,7 @@
 export default {
   props: {
     index: {
-      type: Number
+      type: String
     },
     page: {
       type: Number
@@ -38,20 +43,10 @@ export default {
   },
   data() {
     return {
-      width: 0,
-      height: 0,
-      top: 0,
-      left: 0,
       active: false,
     }
   },
   methods: {
-    resize(newRect) {
-      this.width = newRect.width;
-      this.height = newRect.height;
-      this.top = newRect.top;
-      this.left = newRect.left;
-    },
     showButtons(){
       this.active = true;
     },
@@ -64,15 +59,18 @@ export default {
     toBack(){
       this.$store.commit('CHANGE_Z_TO_BOTTOM', this.index)
     },
+    resize(newRect) {
+      var obj = {width: newRect.width, height: newRect.height, top: newRect.top, left: newRect.left}
+      this.$store.commit('RESIZE_ELEMENT', {newSize: obj, idx: this.index})
+    },
     editText(){
       this.$emit('onEdit')
+    },
+    deleteElement(){
+      this.$store.commit('DELETE_ELEMENT', this.index)
     }
   },
   computed: {
-    zIndex() {
-      var obj = this.$store.getters.getElementFromCurrentPage(this.index)
-      return obj ? obj.zIndex : this.index
-    },
     element(){
       return this.$store.getters.getElementFromCurrentPage(this.index)
     }
