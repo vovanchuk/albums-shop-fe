@@ -12,7 +12,7 @@
             <Frames />
           </b-tab>
           <b-tab title="Elementy">
-            <b-card-text>Elementy</b-card-text>
+            <Stickers/>
           </b-tab>
           <b-tab title="Tło">
             <Background/>
@@ -31,13 +31,15 @@ import Photos from './Photos.vue'
 import Frames from '~/components/editor/Frames'
 import TextFields from './TextFields.vue'
 import Layout from './Layout.vue'
+import Stickers from './Stickers.vue'
 export default {
   components: {
     Photos,
     Background,
     TextFields,
     Frames,
-    Layout
+    Layout,
+    Stickers
   },
 }
 </script>
