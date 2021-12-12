@@ -5,6 +5,7 @@
     :z="item.zIndex"
     :x="item.left"
     :y="item.top"
+    :isActive="item.active"
     :minw="100"
     :minh="100"
     @resizing="resize"
@@ -14,7 +15,7 @@
     @deactivated="hideButtons"
   >
     <div class="wrapper" :style="[ item.src ? {'background-image': 'url(' + item.src  + ')'} : {'background-color': 'lightgray'}]">
-      <b-button-group v-show="active">
+      <b-button-group v-show="item.active">
         <b-button class="transparent" @click="toFront">
           <b-icon icon="front"></b-icon>
         </b-button>
@@ -41,16 +42,15 @@ export default {
   },
   data() {
     return {
-      active: false,
       imageIndex: null,
     }
   },
   methods: {
     showButtons(){
-      this.active = true;
+      this.$store.commit('SET_ACTIVE', this.index)
     },
     hideButtons(){
-      this.active = false;
+      this.$store.commit('UNSET_ACTIVE', this.index)
     },
     toFront(){
       this.$store.commit('CHANGE_Z_TO_TOP', this.index)

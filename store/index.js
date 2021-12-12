@@ -52,25 +52,25 @@ export const state = () => ({
   },
   layouts: {
     1 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 498, height: 498, top: 0, left: 0, type: 'image'}
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 498, height: 498, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
     ],
     2 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 498, top: 0, left: 0, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 498, top: 0, left: 253, type: 'image'}
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 498, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 498, top: 0, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'}
     ],
     3 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 498, height: 245, top: 0, left: 0, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 498, height: 245, top: 253, left: 0, type: 'image'}
+      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 498, height: 245, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 498, height: 245, top: 253, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
     ],
     4 : [
       { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 245, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
       { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 245, top: 0, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 498, height: 245, top: 253, left: 0, type: 'image'}
+      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 498, height: 245, top: 253, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
     ],
     5 : [
       { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 498, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
       { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 245, top: 0, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 245, height: 245, top: 253, left: 253, type: 'image'}
+      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 245, height: 245, top: 253, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'}
     ],
     6 : [
       { base64: '', file: null, orgImageId: null, zIndex: 1, width: 163, height: 330, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
@@ -272,8 +272,10 @@ export const mutations = {
   },
   UNSET_ACTIVE(state, id) {
     var page = state.pages[state.currentPage]['elements']
-    var obj = page.find(element => element.id == id)
-    obj.active = false;  
+    var el = page.find(element => element.id == id)
+    if(el == null)
+      return
+    el.active = false;  
   },
   UPDATE_FRAME_COLOR(state, color){
     var page = state.pages[state.currentPage]['elements']

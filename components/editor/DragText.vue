@@ -5,6 +5,7 @@
     :z="element.zIndex"
     :x="element.left"
     :y="element.top"
+    :isActive="element.active"
     @resizing="resize"
     @dragging="resize"
     :parentLimitation="true"
@@ -13,7 +14,7 @@
   >
     <div class="wrapper" :ref="index">
       <div v-html="element.text"></div>
-      <b-button-group v-show="active" style="position: absolute">
+      <b-button-group v-show="element.active" style="position: absolute">
         <b-button class="transparent" @click="editText">
           <b-icon icon="pencil"></b-icon>
         </b-button>
@@ -41,17 +42,12 @@ export default {
       type: Number
     }
   },
-  data() {
-    return {
-      active: false,
-    }
-  },
   methods: {
     showButtons(){
-      this.active = true;
+      this.$store.commit('SET_ACTIVE', this.index)
     },
     hideButtons(){
-      this.active = false;
+      this.$store.commit('UNSET_ACTIVE', this.index)
     },
     toFront(){
       this.$store.commit('CHANGE_Z_TO_TOP', this.index)

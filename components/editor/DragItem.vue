@@ -17,7 +17,7 @@
     <div class="wrapper" @drop="drop" @dragover="allowDrop" 
     :style="[ item.base64 ? {'background-image': 'url(' + item.base64  + ')'} : {'background-color': 'lightgray'}, 
               item.frame ? { 'border-width' : item.frame.width, 'border-style' : item.frame.style, 'border-color': item.frameColor, 'border-radius': item.frame.radius} : '']">
-      <b-button-group v-show="active">
+      <b-button-group v-show="item.active">
         <b-button class="transparent" @click="editPhoto">
           <b-icon icon="pencil"></b-icon>
         </b-button>
@@ -47,7 +47,6 @@ export default {
   },
   data() {
     return {
-      active: false,
       imageIndex: null,
     }
   },
@@ -69,11 +68,9 @@ export default {
     },
     showButtons(){
       this.$store.commit('SET_ACTIVE', this.index)
-      this.active = true;
     },
     hideButtons(){
       this.$store.commit('UNSET_ACTIVE', this.index)
-      this.active = false;
     },
     editPhoto() {
       this.$emit('onEdit', {imageIndex: this.imageIndex, itemIndex: this.index})
