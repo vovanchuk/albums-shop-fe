@@ -12,4 +12,3 @@
   </b-navbar>
 </template>
 
-nuxt-link-go-back

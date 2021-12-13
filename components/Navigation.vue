@@ -4,8 +4,8 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item-dropdown 
-          text="Szablony">   
+        <b-nav-item-dropdown
+          text="Szablony">
             <b-dropdown-item to="/templates/wedding">Ślubne</b-dropdown-item>
             <b-dropdown-item to="/templates/occasion">Okazjonalne</b-dropdown-item>
             <b-dropdown-item to="/templates/trip">Podróżnicze</b-dropdown-item>
@@ -18,7 +18,7 @@
       <b-navbar-nav v-if="$auth.loggedIn" class="ml-auto">
         <b-nav-item-dropdown :text="'Witaj '+ $auth.user.email +' !'" right>
             <b-dropdown-item>Ustawienia konta</b-dropdown-item>
-            <b-dropdown-item>Wyloguj</b-dropdown-item>
+            <b-dropdown-item @click="$auth.logout()">Wyloguj</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
       <b-navbar-nav v-else class="ml-auto">
