@@ -1,38 +1,22 @@
 <template>
   <div class="container" :style="canvasVars">
-    <div class="d-flex justify-content-center flex-column">
-      <div
-        v-for="(page, idx) in pages"
-      >
+    <div class="d-flex align-items-center flex-column mt-2">
+      <div v-for="(page, idx) in pages" :key="idx">
         <Page
           v-if="currentPage === idx || loading"
           :key="idx"
           :page="page"
           :index="idx"
+          :pagesNumber="pagesNumber"
           @onEdit="setCurrentImageIndex"
           @setCurrent="onTextEdit"
         />
       </div>
     </div>
-    <div class="d-flex justify-content-between align-items-center mt-3 mb-3 ">
-      <div>
+    <div class="d-flex align-items-center mt-3 mb-3 ">
         <b-button variant="link" @click="addPage">Dodaj stronę</b-button>
         <b-button variant="link" @click="removePage">Usuń stronę</b-button>
-      </div>
-      <b-button-group class="align-items-center">
-        <b-button @click="previousPage">
-          <b-icon icon="chevron-compact-left"></b-icon>
-        </b-button>
-        <b-button disabled>
-          {{ currentPage + 1 }}
-        </b-button>
-        <b-button @click="nextPage">
-          <b-icon icon="chevron-compact-right"></b-icon>
-        </b-button>
-      </b-button-group>
-      <div>
-        <b-button variant="link" @click="generatePdf">Generate</b-button>
-      </div>
+        <b-button variant="link" @click="generatePdf">Pobierz</b-button>
     </div>
     <TextEditModal
       v-if="textModalOpen"
@@ -113,18 +97,6 @@ export default {
       this.currentItemIndex = id
       this.textModalOpen = true
     },
-    previousPage(){
-      if(this.currentPage === 0)
-        return
-      var number = this.currentPage - 1
-      this.$store.commit('CHANGE_CURRENT_PAGE', number)
-    },
-    nextPage(){
-      if(this.currentPage === Object.keys(this.pages).length - 1)
-        return
-      var number = this.currentPage + 1
-      this.$store.commit('CHANGE_CURRENT_PAGE', number)
-    },
     addPage() {
       this.$store.commit('ADD_PAGE')
       this.$forceUpdate()
@@ -181,6 +153,9 @@ export default {
     imagesFromPage() {
       return this.$store.getters['getPhotosFromPage']
     },
+    pagesNumber(){
+      return this.pages.length
+    },
     currentText: {
       get() {
         return this.currentImage?.type === 'text' ? this.currentImage.text : null
@@ -202,5 +177,12 @@ export default {
 <style lang="scss">
 .tui-image-editor-header {
   display: none;
+}
+.nav-buttons {
+  .btn-secondary{
+    color: #B28530;
+    background-color: white;
+    border: 1px solid #B28530;
+  }
 }
 </style>

@@ -1,41 +1,75 @@
 <template>
-  <div class="my-3">
-    <b-row class="ml-3">
-      <div class="frame" v-for="frame in frames">
-        <img class="preview" :src="frame.url" alt="" @click="setFrame(frame)">
-      </div>
-    </b-row>
-  </div>
+    <div class="horizontal-scrollable mb-3">
+      <b-row>
+        <div class="bg preview-div">
+            <chrome-picker v-model="color" @input="updateValue"/>
+        </div>
+        <div class="preview-div" v-for="(item, index) in frames" :key="index">
+            <b-img 
+                v-if="item" 
+                :src="require('~/assets/images/frames/' + item)" 
+                :id="index"
+                @click="updateFrame"
+            />
+        </div>
+      </b-row>
+    </div>
 </template>
 
 <script>
+import { Chrome } from 'vue-color'
 export default {
-  methods: {
-    setFrame(frame) {
-      this.$store.commit('SET_CURRENT_PAGE_FRAME', frame)
-    }
-  },
-  computed: {
-    frames() {
-      return this.$store.getters.getFrames
+    components: {     
+        'chrome-picker': Chrome,
     },
-    currentPage() {
-      return this.$store.getters['getCurrentPage']
+    data(){
+        return {
+            frames: [],
+            color: '#000'
+        }
     },
-  }
+    methods: {
+        addImages(){ 
+            for(var i=1; i < 7; i++){
+                var frame = 'frame' + i + '.jpg'
+                this.frames.push(frame)
+            }
+        },
+        updateFrame(e){
+            this.$store.commit('SET_FRAME', e.target.id)
+        },
+        updateValue(){
+            this.$store.commit('UPDATE_FRAME_COLOR', this.color.hex)
+        }
+    },
+    computed: {
+        currentPage() {
+            return this.$store.getters['getCurrentPage']
+        },
+    },
+    mounted() {
+        this.addImages()
+    },
 }
 </script>
 
 <style lang="scss">
-.frame {
-  width: 100px;
-  height: 100px;
-  border: 1px solid gray;
-  margin: 0 20px;
-}
-img.preview {
-  width: 100px;
-  height: 100px;
-  cursor: pointer;
-}
+    .bg{
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       max-height: 150px;
+       max-width: 150px;
+    }  
+    .vc-chrome-body .vc-chrome-fields-wrap{
+        display: none;
+    }
+    .vc-chrome-body .vc-chrome-controls .vc-chrome-sliders{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .vc-chrome-body .vc-chrome-controls .vc-chrome-sliders .vc-chrome-alpha-wrap{
+        display: none;
+    }
 </style>

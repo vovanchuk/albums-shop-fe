@@ -62,5 +62,4 @@ export default {
     .vc-chrome-body .vc-chrome-fields-wrap{
         display: none;
     }
-
 </style>

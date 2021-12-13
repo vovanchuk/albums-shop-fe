@@ -19,19 +19,12 @@
                     </b-form-group>
                     <b-form-group label="Liczba stron">
                         <b-form-radio-group id="pages">
-                            <b-form-radio value="20">20</b-form-radio>
-                            <b-form-radio value="40">40</b-form-radio>
+                            <b-form-radio value="20">10</b-form-radio>
+                            <b-form-radio value="40">20</b-form-radio>
                         </b-form-radio-group>
-                    </b-form-group>
-                    <b-form-group label="Rodzaj okładki">
-                        <b-form-radio-group id="cover">
-                            <b-form-radio value="hard">Twarda</b-form-radio>
-                            <b-form-radio value="canvas">Płótno</b-form-radio>
-                        </b-form-radio-group>                    
                     </b-form-group>
                 </div>
                 <div>
-                    <h1>79 PLN</h1>
                     <b-button to="/editor" block variant="outline-primary mt-3">Dostosuj szablon</b-button>
                 </div>
             </b-col>

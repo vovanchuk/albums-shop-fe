@@ -7,14 +7,17 @@
     :y="item.top"
     :minw="150"
     :minh="150"
+    :isActive="item.active"
     @resizing="resize"
     @dragging="resize"
     :parentLimitation="true"
     @activated="showButtons"
     @deactivated="hideButtons"
   >
-    <div class="wrapper" @drop="drop" @dragover="allowDrop" :style="[ item.base64 ? {'background-image': 'url(' + item.base64  + ')'} : {'background-color': 'lightgray'}]">
-      <b-button-group v-show="active">
+    <div class="wrapper" @drop="drop" @dragover="allowDrop" 
+    :style="[ item.base64 ? {'background-image': 'url(' + item.base64  + ')'} : {'background-color': 'lightgray'}, 
+              item.frame ? { 'border-width' : item.frame.width, 'border-style' : item.frame.style, 'border-color': item.frameColor, 'border-radius': item.frame.radius} : '']">
+      <b-button-group v-show="item.active">
         <b-button class="transparent" @click="editPhoto">
           <b-icon icon="pencil"></b-icon>
         </b-button>
@@ -44,7 +47,6 @@ export default {
   },
   data() {
     return {
-      active: false,
       imageIndex: null,
     }
   },
@@ -65,10 +67,10 @@ export default {
       this.imageIndex = id
     },
     showButtons(){
-      this.active = true;
+      this.$store.commit('SET_ACTIVE', this.index)
     },
     hideButtons(){
-      this.active = false;
+      this.$store.commit('UNSET_ACTIVE', this.index)
     },
     editPhoto() {
       this.$emit('onEdit', {imageIndex: this.imageIndex, itemIndex: this.index})
@@ -78,6 +80,7 @@ export default {
     },
     toBack(){
       this.$store.commit('CHANGE_Z_TO_BOTTOM', this.index)
+      console.log(this.item.frame)
     },
     resize(newRect) {
       var obj = {width: newRect.width, height: newRect.height, top: newRect.top, left: newRect.left}

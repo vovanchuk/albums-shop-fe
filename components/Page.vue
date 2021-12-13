@@ -1,22 +1,31 @@
 <template>
-  <div
-    class="page"
-  >
+  <div class="page d-flex flex-column align-items-center">
     <div class="canvas"
         :style="[ page.backgroundImage  !== 'color' ? {'background-image': 'url(' + page.backgroundImage + ')'} : {'background-color': page.backgroundColor}]">
-      <img v-if="page.frame && page.frame.url" :src="page.frame.url" alt="" class="page-frame">
       <DragItem v-for="item in images" :item="item" :key="item.id" :index="item.id" @onEdit="editPhoto"/>
       <DragText v-for="item in textFields" :key="item.id" :index="item.id" @onEdit="onTextEdit(item.id)"/>
+      <DragSticker v-for="item in stickers" :item="item" :key="item.id" :index="item.id"/>
     </div>
+    <b-button-group class="nav-buttons mt-2">
+      <b-button @click="previousPage">
+        <b-icon icon="chevron-compact-left"></b-icon>
+      </b-button>
+      <b-button disabled>
+        {{ this.index + 1 }}
+      </b-button>
+      <b-button @click="nextPage">
+        <b-icon icon="chevron-compact-right"></b-icon>
+      </b-button>
+    </b-button-group>
   </div>
 </template>
 
 <script>
 import DragItem from "~/components/editor/DragItem"
 import DragText from "~/components/editor/DragText"
-
+import DragSticker from '~/components/editor/DragSticker.vue'
 export default {
-  components: {DragItem, DragText},
+  components: {DragItem, DragText, DragSticker},
   props: {
     index: {
       type: Number
@@ -24,6 +33,9 @@ export default {
     page: {
       type: Object,
       required: true
+    },
+    pagesNumber: {
+      type: Number,
     }
   },
   methods: {
@@ -33,6 +45,18 @@ export default {
     editPhoto(data) {
       this.$emit('onEdit', {imageIndex: data.imageIndex, itemIndex: data.itemIndex})
     },
+    previousPage(){
+      if(this.index === 0)
+        return
+      var number = this.index - 1
+      this.$store.commit('CHANGE_CURRENT_PAGE', number)
+    },
+    nextPage(){
+      if(this.index === this.pagesNumber - 1)
+        return
+      var number = this.index + 1
+      this.$store.commit('CHANGE_CURRENT_PAGE', number)
+    },
   },
   computed: {
     images() {
@@ -41,6 +65,9 @@ export default {
     textFields() {
       return this.page.elements.filter(el => el.type === 'text')
     },
+    stickers(){
+      return this.page.elements.filter(el => el.type === 'sticker')
+    },
   },
 }
 </script>
@@ -48,14 +75,6 @@ export default {
 <style lang="scss">
 .canvas {
   position: relative;
-}
-.page-frame {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
 }
 .canvas {
   background-position: center;

@@ -1,23 +1,21 @@
 <template>
   <vue-drag-resize
-    :w="element.width"
-    :h="element.height"
-    :z="element.zIndex"
-    :x="element.left"
-    :y="element.top"
-    :isActive="element.active"
+    :w="item.width"
+    :h="item.height"
+    :z="item.zIndex"
+    :x="item.left"
+    :y="item.top"
+    :isActive="item.active"
+    :minw="100"
+    :minh="100"
     @resizing="resize"
     @dragging="resize"
     :parentLimitation="true"
     @activated="showButtons"
     @deactivated="hideButtons"
   >
-    <div class="wrapper" :ref="index">
-      <div v-html="element.text"></div>
-      <b-button-group v-show="element.active" style="position: absolute">
-        <b-button class="transparent" @click="editText">
-          <b-icon icon="pencil"></b-icon>
-        </b-button>
+    <div class="wrapper" :style="[ item.src ? {'background-image': 'url(' + item.src  + ')'} : {'background-color': 'lightgray'}]">
+      <b-button-group v-show="item.active">
         <b-button class="transparent" @click="toFront">
           <b-icon icon="front"></b-icon>
         </b-button>
@@ -38,8 +36,13 @@ export default {
     index: {
       type: String
     },
-    page: {
-      type: Number
+    item: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      imageIndex: null,
     }
   },
   methods: {
@@ -59,18 +62,10 @@ export default {
       var obj = {width: newRect.width, height: newRect.height, top: newRect.top, left: newRect.left}
       this.$store.commit('RESIZE_ELEMENT', {newSize: obj, idx: this.index})
     },
-    editText(){
-      this.$emit('onEdit')
-    },
     deleteElement(){
       this.$store.commit('DELETE_ELEMENT', this.index)
     }
   },
-  computed: {
-    element(){
-      return this.$store.getters.getElementFromCurrentPage(this.index)
-    }
-  }
 }
 </script>
 
