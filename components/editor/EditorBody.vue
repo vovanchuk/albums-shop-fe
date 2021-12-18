@@ -17,6 +17,7 @@
         <b-button variant="link" @click="addPage">Dodaj stronę</b-button>
         <b-button variant="link" @click="removePage">Usuń stronę</b-button>
         <b-button variant="link" @click="generatePdf">Pobierz</b-button>
+        <b-button variant="link" @click="save">Zapisz</b-button>
     </div>
     <TextEditModal
       v-if="textModalOpen"
@@ -129,6 +130,12 @@ export default {
     setCurrentImageIndex(data) {
       this.currentItemIndex = data.itemIndex
       this.$bvModal.show('modal')
+    },
+    save(){
+      if(this.$auth.loggedIn)
+        console.log('ok')
+      else
+        this.$router.push('/login')
     }
   },
   computed: {

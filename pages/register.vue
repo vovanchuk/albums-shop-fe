@@ -21,17 +21,17 @@ export default {
   },
   methods: {
     registerUser(userInfo) {
-      console.log(userInfo)
-      if(!userInfo.email) {
-        this.errors.email = ['E-Mail is required']
-      }
-      if(!userInfo.password) {
-        this.errors.password = ['Password is required']
-      }
-      if(!userInfo.name) {
-        this.errors.name = ['Name is required']
-      }
       if(!userInfo.email || !userInfo.password || !userInfo.name) {
+        this.errors = {}
+        if(!userInfo.email) {
+          this.errors.email = ['E-Mail jest wymagany']
+        }
+        if(!userInfo.password) {
+          this.errors.password = ['Hasło jest wymagane']
+        }
+        if(!userInfo.name) {
+          this.errors.name = ['Nazwa jest wymagana']
+        }
         return
       }
       this.$axios.post('/api/auth/register/', {
@@ -40,7 +40,18 @@ export default {
         password: userInfo.password,
         password_confirmation: userInfo.password
       }).then(response => {
-        this.$router.push('/')
+        this.$auth.loginWith('local', {data: {email: userInfo.email, password: userInfo.password}}).then(res => {
+          this.$router.push('/')})
+      }).catch(err => {
+        if(err.response.data.errors) {
+          this.errors = err.response.data.errors
+          if(err.response.data.errors.password)
+            this.errors.password = ['Hasło musi mieć co najmniej 6 znaków']
+          if(err.response.data.errors.email)
+            this.errors.email = ['E-mail musi być prawidłowym adresem e-mail']
+          if(err.response.data.errors.name)
+            this.errors.name = ['Nazwa musi mieć od 2 do 100 znaków']
+        }
       })
     }
   }

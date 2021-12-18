@@ -2,7 +2,6 @@
   <div class="d-flex flex-column min-vh-100" style="position: relative;">
     <EditorNavigation/>
     <nuxt class="wrapper flex-grow-1"/>
-    <EditorFooter/>
     <LoadingOverlay v-if="loading"/>
   </div>
 </template>
