@@ -90,7 +90,14 @@ export default {
         doc.addImage(images[i], 'JPEG', 0, 0, width, height)
       }
 
-      doc.save("file.pdf")
+      const file = doc.output('blob')
+      const fd = new FormData()
+      fd.append('file', file)
+
+      if(this.$auth.loggedIn) {
+        await this.$axios.post('/api/album', fd)
+      }
+      doc.save("album.pdf")
       this.$store.commit('SET_LOADING', false)
     },
     onTextEdit(id) {

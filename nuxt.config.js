@@ -19,6 +19,10 @@ export default {
     ]
   },
 
+  env: {
+    backendUrl: process.env.BACKEND_URL,
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/css/main.scss',
@@ -39,6 +43,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/dotenv',
     '@nuxtjs/google-fonts',
   ],
   googleFonts: {
@@ -59,7 +64,7 @@ export default {
   build: {
   },
   axios: {
-    baseURL: 'http://localhost:8000'
+    baseURL: process.env.BACKEND_URL || 'http://localhost:8000'
   },
   auth: {
     redirect: {
