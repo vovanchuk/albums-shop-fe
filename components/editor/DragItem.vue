@@ -56,15 +56,17 @@ export default {
     },
     drop(e) {
       e.preventDefault();
-      var id = e.dataTransfer.getData("text")
-      var obj = this.images[id]
-      this.$store.commit('ADD_IMAGE_TO_PAGE', {
-        orgImageId: id,
-        base64: obj.base64,
-        file: obj.file,
-        itemId: this.index,
-      })
-      this.imageIndex = id
+      if(e.dataTransfer.getData("index")){
+       var id = e.dataTransfer.getData("index")
+       var obj = this.images[id]
+       this.$store.commit('ADD_IMAGE_TO_PAGE', {
+         orgImageId: id,
+         base64: obj.base64,
+         file: obj.file,
+         itemId: this.index,
+       })
+       this.imageIndex = id
+      }
     },
     showButtons(){
       this.$store.commit('SET_ACTIVE', this.index)

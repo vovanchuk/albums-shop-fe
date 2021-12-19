@@ -56,7 +56,7 @@ export default {
       this.$store.commit('DELETE_IMAGE_BY_INDEX', index)
     },
     drag(e) {
-      e.dataTransfer.setData("text", e.target.id);
+      e.dataTransfer.setData("index", e.target.id);
     },
     formatNames() {
       var files = this.$store.getters['getPhotos']

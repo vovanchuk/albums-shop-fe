@@ -1,7 +1,20 @@
 <template>
   <b-form>
     <b-form-group v-if="hasName">
-      <b-form-input type="text" placeholder="Nazwa użytkownika" v-model="userInfo.name"></b-form-input>
+      <b-form-input 
+        type="text" 
+        placeholder="Nazwa użytkownika" 
+        v-model="userInfo.name"
+        aria-describedby="input-name-feedback"
+        :state="nameErrorStatus"
+      ></b-form-input>
+      <b-form-invalid-feedback
+        v-for="item in errors.name"
+        :key="item"
+        id="input-name-feedback"
+      >
+        {{item}}
+      </b-form-invalid-feedback>
     </b-form-group>
     <b-form-group>
       <b-form-input
@@ -13,6 +26,7 @@
       ></b-form-input>
       <b-form-invalid-feedback
         v-for="item in errors.email"
+        :key="item"
         id="input-email-feedback"
       >
         {{item}}
@@ -29,6 +43,7 @@
       <b-form-invalid-feedback
         v-for="item in errors.password"
         id="input-password-feedback"
+        :key="item"
       >
         {{item}}
       </b-form-invalid-feedback>
@@ -67,6 +82,15 @@ export default {
     }
   },
   computed: {
+    nameError(){
+      return this.errors.name
+    },
+    nameErrorStatus() {
+      let err = this.errors.name
+      if(err && err.length > 0) return false
+      else if (this.errors.name !== undefined) return null
+      else if (this.userInfo.name) return true
+    },
     emailError() {
       return this.errors.email
     },

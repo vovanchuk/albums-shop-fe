@@ -17,6 +17,7 @@
         <b-button variant="link" @click="addPage">Dodaj stronę</b-button>
         <b-button variant="link" @click="removePage">Usuń stronę</b-button>
         <b-button variant="link" @click="generatePdf">Pobierz</b-button>
+        <b-button variant="link" >Zapisz</b-button>
     </div>
     <TextEditModal
       v-if="textModalOpen"
