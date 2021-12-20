@@ -23,7 +23,7 @@
           </b-tr>
         </b-thead>
         <b-tbody>
-          <b-tr v-for="album in albums">
+          <b-tr v-for="album in albums" :key="album">
             <b-th>{{ parseDate(album.created_at) }}</b-th>
             <b-th>
               <b-btn @click="download(album.path)">Pobierz</b-btn>

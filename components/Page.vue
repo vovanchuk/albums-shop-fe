@@ -77,7 +77,7 @@ export default {
   position: relative;
 }
 .canvas {
-  background-position: center;
+  background-position: center !important; 
   background: no-repeat;
   background-size: cover;
   border: 1px solid rgba(0, 0, 0, 0.125);

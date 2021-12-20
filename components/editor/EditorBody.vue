@@ -48,14 +48,21 @@ import jsPDF from 'jspdf'
 
 export default {
   components: {TextEditModal},
+  props: {
+    defaultPagesNumber: {
+      type: Number
+    },
+    pageFormat: {
+      type: Number
+    },
+    coverUrl: {
+      type: String
+    }
+  },
   data() {
     return {
       currentItemIndex: null,
       textModalOpen: false,
-      size: {
-        width: 500,
-        height: 500
-      }
     }
   },
   methods:{
@@ -77,9 +84,9 @@ export default {
       }
 
       var doc = new jsPDF({
-        orientation: 'landscape',
+        orientation: this.orientation,
         unit: 'pt',
-        format: [this.size.height, this.size.width]
+        format: [this.height, this.width]
       });
 
       var width = doc.internal.pageSize.getWidth()
@@ -90,7 +97,6 @@ export default {
         }
         doc.addImage(images[i], 'JPEG', 0, 0, width, height)
       }
-
       const file = doc.output('blob')
       const fd = new FormData()
       fd.append('file', file)
@@ -137,13 +143,51 @@ export default {
     setCurrentImageIndex(data) {
       this.currentItemIndex = data.itemIndex
       this.$bvModal.show('modal')
+    },
+    addDefaultPages(){
+      var width = 500
+      var height = 500
+      if(this.pageFormat == 1){
+        width = 400
+      }
+      else if(this.pageFormat == 2){
+        height = 400
+      }
+      this.$store.commit('SET_LAYOUTS', {width : width, height: height})
+      this.$store.commit('DELETE_ALL_PAGES')
+      for(let i = 0; i< this.defaultPagesNumber; i++){
+        this.$store.commit('ADD_PAGE')
+      }
+      this.$store.commit('UPDATE_BG_IMAGE', this.coverUrl)
     }
   },
   computed: {
+    height (){
+      if(this.pageFormat == 1)
+        return 500
+      else if(this.pageFormat == 2)
+        return 400
+      else
+        return 500
+    },
+    width(){
+      if(this.pageFormat == 1)
+        return 400
+      else if(this.pageFormat == 2)
+        return 500
+      else
+        return 500
+    },
+    orientation(){
+      if(this.pageFormat == 1)
+        return 'portrait'
+      else
+        return 'landscape'
+    },
     canvasVars() {
       return {
-        '--canvas-height': this.size.height + 'px',
-        '--canvas-width': this.size.width + 'px',
+        '--canvas-height': this.height + 'px',
+        '--canvas-width': this.width + 'px',
       }
     },
     loading() {
@@ -178,6 +222,9 @@ export default {
         }
       }
     }
+  },
+  created(){
+    this.addDefaultPages()
   }
 }
 </script>

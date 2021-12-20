@@ -29,17 +29,25 @@ export default {
         },
         updateLayout(e){
             var id = Number(e.target.id) + 1
+            if(this.currentLayout == id){
+                return
+            }
             this.$store.commit('UPDATE_LAYOUT', id)
             var elements = this.$store.getters.getElementsFromLayout(id)
             elements.forEach((element) => {
                 this.$store.commit('ADD_LAYOUT_ELEMENT', element)
             })
+            console.log('id', id)
+            console.log('currentLayout', this.currentLayout)
         },
     },
     computed: {
         currentPage() {
             return this.$store.getters['getCurrentPage']
         },
+        currentLayout(){
+            return this.$store.getters['getCurrentLayout']
+        }
     },
     mounted() {
         this.addImages()

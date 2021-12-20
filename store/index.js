@@ -50,46 +50,7 @@ export const state = () => ({
       { id: 6, url: 'wedding-modern.jpg', title: ''},
     ]
   },
-  layouts: {
-    1 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 498, height: 498, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
-    ],
-    2 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 498, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 498, top: 0, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'}
-    ],
-    3 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 498, height: 245, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 498, height: 245, top: 253, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
-    ],
-    4 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 245, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 245, top: 0, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 498, height: 245, top: 253, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
-    ],
-    5 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 498, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 245, top: 0, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 245, height: 245, top: 253, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'}
-    ],
-    6 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 163, height: 330, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 330, height: 330, top: 0, left: 168, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 498, height: 163, top: 335, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-    ],
-    7 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 245, height: 245, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 245, height: 245, top: 0, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 245, height: 245, top: 253, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 4, width: 245, height: 245, top: 253, left: 253, frame: null, frameColor: '#000', active: false, type: 'image'}
-    ],
-    8 : [
-      { base64: '', file: null, orgImageId: null, zIndex: 1, width: 330, height: 330, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 2, width: 330, height: 163, top: 335, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 3, width: 163, height: 330, top: 168, left: 335, frame: null, frameColor: '#000', active: false, type: 'image'},
-      { base64: '', file: null, orgImageId: null, zIndex: 4, width: 163, height: 163, top: 0, left: 335, frame: null, frameColor: '#000', active: false, type: 'image'}
-    ]
-  },
+  layouts: {},
   frames: [
     { width: '0px', style: 'none', radius: '0'},
     { width: '5px', style: 'solid', radius: '0'},
@@ -99,26 +60,9 @@ export const state = () => ({
     { width: '5px', style: 'double', radius: '0'},
   ],
   images: [],
-  pages: [
-    {
-      'elements': [],
-      'backgroundImage': 'color',
-      'backgroundColor': '#fff',
-      'currentLayout' : 0
-    },
-    {
-      'elements': [],
-      'backgroundImage': 'color',
-      'backgroundColor': '#fff',
-      'currentLayout' : 0
-    },
-    {
-      'elements': [],
-      'backgroundImage': 'color',
-      'backgroundColor': '#fff',
-      'currentLayout' : 0
-    },
-  ],
+  pages: [],
+  pageWidth: 0,
+  pageHeight: 0,
   currentPage: 0,
   currentElement: null,
   loading: false
@@ -157,6 +101,9 @@ export const mutations = {
     var z = state.pages[state.currentPage]['elements'].length + 1
     element['zIndex'] = z
     element['id'] = id
+    element['base64'] = ''
+    element['file'] = null
+    element['orgImageId'] = null
     page.push(element)
   },
   ADD_IMAGE_TO_PAGE(state, imageObj) {
@@ -240,16 +187,19 @@ export const mutations = {
   DELETE_ALL_ELEMENTS(state){
     state.pages[state.currentPage]['elements'] = []
   },
+  DELETE_ALL_PAGES(state){
+    state.pages = []
+    state.currentPage = 0
+  },
   UPDATE_ELEMENT(state, {id, newEl}) {
     const elIdx = state.pages[state.currentPage]['elements'].findIndex(element => element.id === id)
     if(elIdx >= 0) {
       Vue.set(state.pages[state.currentPage]['elements'], elIdx, newEl)
-      // state.pages[state.currentPage]['elements'][elIdx] = newEl
     }
   },
   UPDATE_LAYOUT(state, id){
     var page = state.pages[state.currentPage]
-    page['current_layout'] = id
+    page['currentLayout'] = id
   },
   SET_FRAME(state, id){
     var frame = state.frames[id]
@@ -284,6 +234,48 @@ export const mutations = {
       return
     el.active = true
     el.frameColor = color
+  },
+  SET_LAYOUTS(state, size){
+    state.layouts = {
+      1 : [
+        { base64: '', file: null, orgImageId: null, zIndex: 1, width: size.width-2, height: size.height-2, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
+      ],
+      2 : [
+        { base64: '', file: null, orgImageId: null, zIndex: 1, width: size.width/2-4, height: size.height-2, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 2, width: size.width/2-4, height: size.height-2, top: 0, left: size.width/2+2, frame: null, frameColor: '#000', active: false, type: 'image'}
+      ],
+      3 : [
+        { base64: '', file: null, orgImageId: null, zIndex: 1, width: size.width-2, height: size.height/2-4, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 2, width: size.width-2, height: size.height/2-4, top: size.height/2+2, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
+      ],
+      4 : [
+        { base64: '', file: null, orgImageId: null, zIndex: 1, width: size.width/2-4, height: size.height/2-4, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 2, width: size.width/2-4, height: size.height/2-4, top: 0, left: size.width/2+2, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 3, width: size.width-2, height: size.height/2-4, top: size.height/2+2, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'}
+      ],
+      5 : [
+        { base64: '', file: null, orgImageId: null, zIndex: 1, width: size.width/2-4, height: size.height-2, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 2, width: size.width/2-4, height: size.height/2-4, top: 0, left: size.width/2+2, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 3, width: size.width/2-4, height: size.height/2-4, top: size.height/2+2, left: size.width/2+2, frame: null, frameColor: '#000', active: false, type: 'image'}
+      ],
+      6 : [
+        { base64: '', file: null, orgImageId: null, zIndex: 1, width: size.width/3-3, height: (size.height/3-4)*2, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 2, width: (size.width/3-5)*2, height: (size.height/3-4)*2, top: 0, left: size.width/3+8, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 3, width: size.width-2, height: size.height/3-4, top: (size.height/3)*2+2, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+      ],
+      7 : [
+        { base64: '', file: null, orgImageId: null, zIndex: 1, width: size.width/2-4, height: size.height/2-4, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 2, width: size.width/2-4, height: size.height/2-4, top: 0, left: size.width/2+2, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 3, width: size.width/2-4, height: size.height/2-4, top: size.height/2+2, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 4, width: size.width/2-4, height: size.height/2-4, top: size.height/2+2, left: size.width/2+2, frame: null, frameColor: '#000', active: false, type: 'image'}
+      ],
+      8 : [
+        { base64: '', file: null, orgImageId: null, zIndex: 1, width: (size.width/3-5)*2, height: (size.height/3-4)*2, top: 0, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 2, width: (size.width/3-5)*2, height: size.height/3-4, top: (size.height/3)*2+2, left: 0, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 3, width: size.width/3, height: (size.height/3-2)*2, top: size.height/3+2, left: (size.width/3)*2-2, frame: null, frameColor: '#000', active: false, type: 'image'},
+        { base64: '', file: null, orgImageId: null, zIndex: 4, width: size.width/3, height: size.height/3-4, top: 0, left: (size.width/3)*2-2, frame: null, frameColor: '#000', active: false, type: 'image'}
+      ]
+    }
   }
 }
 
@@ -295,12 +287,13 @@ export const getters = {
     return state.allTemplates[category].find(template => template.id == id)
   },
   getPhotos: (state) => state.images,
-  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'].find(element => element.id === id) ?? '',
+  getElementFromCurrentPage: (state) => (id) => state.pages[state.currentPage]['elements'].find(element => element.id === id) == undefined ? '' : state.pages[state.currentPage]['elements'].find(element => element.id === id),
   getPages: (state) => state.pages,
   getPageById: (state) => (id) => state.pages[id],
   getCurrentPage: (state) => state.currentPage,
   getFrames: (state) => state.frames,
   getCurrentPageData: (state) => state.pages[state.currentPage],
   getElementsFromLayout: (state) => (id) => state.layouts[id],
-  getLoading: (state) => state.loading
+  getLoading: (state) => state.loading,
+  getCurrentLayout: (state) => state.pages[state.currentPage]['currentLayout']
 }

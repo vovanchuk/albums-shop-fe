@@ -1,7 +1,7 @@
 <template>
     <div>
         <EditorHeader/>
-        <EditorBody/>
+        <EditorBody :defaultPagesNumber="pagesNumber" :pageFormat="pageFormat" :coverUrl="coverUrl"/>
     </div>
 </template>
 
@@ -14,5 +14,16 @@ export default {
       e.returnValue = '';
     });
   },
+  computed: {
+    pagesNumber(){
+      return Number(this.$route.params.pagesNumber)
+    },
+    pageFormat(){
+      return Number(this.$route.params.pageFormat)
+    },
+    coverUrl(){
+      return this.$route.params.coverUrl
+    }
+  }
 }
 </script>
