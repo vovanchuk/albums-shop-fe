@@ -7,9 +7,9 @@
               Dodaj miejsce <br/> na zdjęcie
             </div>
             <div class="preview-div" v-for="(item, index) in images" :key="index">
-              <b-img 
-                v-if="item.base64" 
-                :src="item.base64" 
+              <b-img
+                v-if="item.base64"
+                :src="item.base64"
                 :id="index"
                 draggable="true"
                 @dragstart="drag"
@@ -35,10 +35,16 @@
 </template>
 
 <script>
+const FILE_SIZE_LIMIT = 1024 * 1000 * 5
+
 export default {
   methods: {
     processUpload(e) {
       const files = e.target.files;
+      if(Array.from(files).some(file => file.size > FILE_SIZE_LIMIT)) {
+        alert('Maksymalny rozmiar zdjęcia wynosi 5MB')
+        return
+      }
       if (files && files.length > 0) {
         Array.from(files).forEach(file => {
           const reader = new FileReader();
