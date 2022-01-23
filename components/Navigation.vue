@@ -8,12 +8,8 @@
           text="Szablony">
           <b-dropdown-item to="/templates/wedding">Ślubne</b-dropdown-item>
           <b-dropdown-item to="/templates/occasion">Okazjonalne</b-dropdown-item>
-          <b-dropdown-item to="/templates/trip">Podróżnicze</b-dropdown-item>
-          <b-dropdown-item to="/templates/kids">Dziecięce</b-dropdown-item>
           <b-dropdown-item to="/templates/birthday">Urodzinowe</b-dropdown-item>
-          <b-dropdown-item to="/templates/person">Dla specjalnej osoby</b-dropdown-item>
         </b-nav-item-dropdown>
-        <b-nav-item to="#">Kontakt</b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav v-if="$auth.loggedIn" class="ml-auto">
         <b-nav-item-dropdown :text="'Witaj '+ $auth.user.email +' !'" right>

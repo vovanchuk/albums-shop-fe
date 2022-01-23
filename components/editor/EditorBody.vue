@@ -145,6 +145,9 @@ export default {
       this.$bvModal.show('modal')
     },
     addDefaultPages(){
+      if(isNaN(this.defaultPagesNumber)){
+        this.$router.back()
+      }
       var width = 500
       var height = 500
       if(this.pageFormat == 1){
@@ -158,7 +161,8 @@ export default {
       for(let i = 0; i< this.defaultPagesNumber; i++){
         this.$store.commit('ADD_PAGE')
       }
-      this.$store.commit('UPDATE_BG_IMAGE', this.coverUrl)
+      if(this.coverUrl)
+        this.$store.commit('UPDATE_BG_IMAGE', this.coverUrl)
     }
   },
   computed: {

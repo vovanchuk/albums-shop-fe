@@ -4,7 +4,7 @@
           <b-row>
             <div class="preview-div add">
               <b-icon icon="plus-square" @click="addElement"></b-icon>
-              Dodaj miejsce <br/> na zdjęcie
+              Dodaj miejsce <br/> na zdjęcie <br> i przeciągnij <br> do niego miniaturkę
             </div>
             <div class="preview-div" v-for="(item, index) in images" :key="index">
               <b-img
