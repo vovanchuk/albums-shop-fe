@@ -1,0 +1,6 @@
+1. npm install
+2. Create .env plik with these content:
+  BACKEND_URL=http://localhost:8000
+Where BACKEND_URL is URL of backend server
+3. npm run build
+4. npm run start (local server will run on default 3000 port)
